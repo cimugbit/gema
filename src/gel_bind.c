@@ -604,7 +604,7 @@ static int gel_ruleclear(lua_State *L)
     luaL_error(L,"Unable to find domain \"%s\"\n",vlpc_dom);
 	return 0;
   }
-  delete_patterns( &vlp_dom->patterns );
+  delete_patterns( &vlp_dom->patterns, TRUE );
   while ( vlp_dom->init_and_final_patterns != NULL ) {
     Pattern p = vlp_dom->init_and_final_patterns;
     vlp_dom->init_and_final_patterns = p->next;

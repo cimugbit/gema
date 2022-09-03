@@ -332,7 +332,7 @@ void
 #else
 static void
 #endif
-delete_patterns ( Patterns ps ) {
+delete_patterns ( Patterns ps, boolean deep ) {
   Pattern p;
   Pattern n;
   if ( ps->dispatch != NULL ) {
@@ -341,7 +341,7 @@ delete_patterns ( Patterns ps ) {
     for ( i = 0 ; i < DISPATCH_SIZE ; i++ ) {
       xp = ps->dispatch[i];
       if ( xp != NULL ) {
-	delete_patterns(xp);
+	delete_patterns(xp, FALSE);
 	free(xp);
       }
     }
@@ -350,7 +350,7 @@ delete_patterns ( Patterns ps ) {
   }
   for ( p = ps->head ; p != NULL ; ) {
     n = p->next;
-    delete_pattern(p);
+    if (deep) delete_pattern(p); else free(p);
     p = n;
   }
   ps->head = NULL;
@@ -361,7 +361,7 @@ void delete_domain(int n) {
   Domain dp;
   assert( n < ndomains );
   dp = domains[n];
-  delete_patterns( &dp->patterns );
+  delete_patterns( &dp->patterns, TRUE );
   while ( dp->init_and_final_patterns != NULL ) {
     Pattern p = dp->init_and_final_patterns;
     dp->init_and_final_patterns = p->next;
@@ -1692,8 +1692,10 @@ dispatch:
   if ( pbuf[0] != PT_END ) {
       int len;
       len = ap - pbuf;
-      astring = (unsigned char*)allocate(len,MemoryPatterns);
+      /* allocate additional byte for function_operand() to be safe */
+      astring = (unsigned char*)allocate(len+1,MemoryPatterns);
       memcpy(astring,pbuf,len);
+      astring[len] = '\0';
   }
  }
  pt->pattern = pstring;
