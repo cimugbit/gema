@@ -111,26 +111,26 @@ function_operand( const unsigned char** asp, CIStream* args ) {
   const unsigned char* ap;
   ap = *asp;
   if ( ap[2] == PT_SEPARATOR ) {
-  if ( ap[0] == PT_PUT_ARG ) {
-	/* special case when operand is $n and nothing else */
- 	CIStream arg = args[ ap[1] - 1 ];
-	*asp = ap+3;
-	cis_rewind(arg);
-  	return clone_input_stream( arg );
-      } /* end PUT_PUT_ARG */
-  if ( ap[0] == PT_VAR1 ) {
-    /* special case for variable to avoid copying the value */
-    char vname[2];
-    size_t len;
-    const char* value;
-    vname[0] = ap[1];
-    vname[1] = '\0';
-    value = get_var(vname, TRUE, &len);
-    if ( value != NULL ) {
+    if ( ap[0] == PT_PUT_ARG ) {
+      /* special case when operand is $n and nothing else */
+      CIStream arg = args[ ap[1] - 1 ];
       *asp = ap+3;
-      return make_string_input_stream(value, len, FALSE);
+      cis_rewind(arg);
+      return clone_input_stream( arg );
+    } /* end PUT_PUT_ARG */
+    if ( ap[0] == PT_VAR1 ) {
+      /* special case for variable to avoid copying the value */
+      char vname[2];
+      size_t len;
+      const char* value;
+      vname[0] = ap[1];
+      vname[1] = '\0';
+      value = get_var(vname, TRUE, &len);
+      if ( value != NULL ) {
+        *asp = ap+3;
+        return make_string_input_stream(value, len, FALSE);
+      }
     }
-  }
   }
   if ( ap[0] == PT_OP ) {
    if ( ap[1] == OP_READ ) {
