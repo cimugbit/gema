@@ -1,0 +1,710 @@
+<html><head>
+<script>function PrivoxyWindowOpen(){return(null);}</script>
+<!-- base href="http://www.anthus.com.wstub.archive.org/Gema/WhyILoveGema.html" --><title>Why I Love Gema</title>
+
+
+<style type="text/css">
+pre {color: "brown";}
+body {margin: "3cm";}
+p {text-align: "justify"}
+</style></head><body>
+<div align="center">
+<h1>Why I Love Gema</h1>
+<i>David A. Mundie</i>
+</div>
+
+<h2>1. Introduction</h2>
+
+<p>Looking back, I now see that without always realizing it, I have
+been searching for the perfect language for text manipulation ever
+since I became interested in computers. I suppose this is natural,
+since I came to computer science from a background in philosophy and
+literature. My first computer project was a program to analyze recipes
+so as to detect their underlying patterns and generalize them into
+metarecipes. </p><p>My first programming course was taught in CDC Fortran and
+strings were represented as 10-element arrays of characters; somehow I
+instinctively realized that computer science could do better than that.
+My first love in programming languages was Snobol; for one brief but
+glorious moment I felt that I had found the humanist's programming
+language, a text-oriented language that transcended the cumbersome,
+mechanical, left-brain thinking of more usual programming languages.
+Then I got the bill, and discovered that analyzing just a few recipes
+had eaten up nearly half of my graduate-student allotment of computer
+time.
+</p><p>There followed a long period of dabbling in programming
+languages. There was the Pascal phase, the Ada phase, the ML phase, the
+Prolog phase, the Awk phase, the Tcl-Tk phase. For a good while I was
+enamored of Perl's synergistic combination of basic pattern matching,
+operating system interface, and general-purpose programming features.
+Each had its merits, but I always knew that something was missing,
+something that kept me from feeling deeply satisfied.
+</p><p>Then I discovered Gema. From the moment I downloaded it, I
+realized this was the programming language for me, and since then I
+have used it extensively whenever the task at hand could be construed
+as a transformation problem - and of course, that covers a lot of
+territory. In many ways it is a strange language for me to have settled
+on, since it lacks the strong typing and other software engineering
+features that I believe essential to programming in the large, but I
+find its rule-based paradigm irresistable for the small- to
+medium-sized projects that I spend most of my time on.
+</p><p>In this article I attempt to explain what it is that draws me
+to Gema, and why I find it such a powerful paradigm for textual
+programming. I begin with what is by design its forte: its powerful
+rule-based transformation capability. In the second section I discuss
+some ancillary issues of program language design which make Gema
+convenient to use, but which would not in and of themselves make it my
+language of choice.
+</p><p>In writing the article I was torn between the need not to
+assume any previous knowledge of Gema and the desire not to have to
+write a tutorial. I have compromised. Throughout the text I am relying
+on the reader's intuitions to make sense of the examples; in an
+Appendix I provide a brief overview of Gema's syntax.
+<br>
+
+</p><div align="center">
+<br>
+<table bgcolor="#ffff99" border="1" cellpadding="3" cellspacing="0">
+<tbody><tr><th><br></th><th>Gema</th><th>Sed</th><th>Awk</th><th>Perl</th></tr>
+<tr><td><b><b>Regular expressions</b></b></td><td>+</td><td>+</td><td>+</td><td>+</td></tr>
+<tr><td><b>Non-line-oriented</b></td><td>+</td><td><br></td><td><br></td><td><br></td></tr>
+<tr><td><b>Non-procedural and rule-based</b></td><td>+</td><td><br></td><td>+</td><td><br></td></tr>
+<tr><td><b>Recognizers </b></td><td>+</td><td><br></td><td><br></td><td>+</td></tr>
+<tr><td><b>User-defined recognizers</b></td><td>+</td><td><br></td><td><br></td><td><br></td></tr>
+<tr><td><b>Unification of matching and function definition</b></td><td>+</td><td><br></td><td><br></td><td><br></td></tr>
+<tr><td><b>Multiple rule sets</b></td><td>+</td><td><br></td><td><br></td><td><br></td></tr>
+<tr><td><b>Context-sensitive matching</b></td><td>+</td><td><br></td><td><br></td><td><br></td></tr>
+<tr><td><b>Recursive patterns</b></td><td>+</td><td><br></td><td><br></td><td><br></td></tr>
+<tr><td><b>Dynamic Patterns</b></td><td>+</td><td><br></td><td><br></td><td><br></td></tr>
+<tr><td><b>User-specified match position</b></td><td>+</td><td><br></td><td><br></td><td><br></td></tr>
+<tr><td><b>User-definable syntax</b></td><td>+</td><td><br></td><td><br></td><td><br></td></tr>
+<tr><td><b>General-purpose programming</b></td><td>+</td><td><br></td><td>+</td><td>+</td></tr>
+<tr><td><b>OS Interface</b></td><td>+</td><td><br></td><td><br></td><td>+</td></tr>
+<tr><td><b>Command-line extension</b></td><td>+</td><td><br></td><td><br></td><td>+</td></tr>
+</tbody></table>
+</div>
+<br>
+
+<p>Gema is often compared to other languages such as Awk or Perl and at
+first glance it can be hard to see what is novel in the language. Table
+1 represents my attempt at a feature chart showing that in truth Gema
+offers many uncommon capabilities.
+</p><p>Before beginning to examine those features, I'd like to say a
+few words about the conciseness of Gema. I freely admit that one of the
+things that appeals to me in Gema is how short programs written in it
+can be. I thrill to the pleasure of creating elegant one-liners that
+accomplish tasks that take many lines of code in other languages-for
+example, a two-line pattern that parses the input to a CGI application,
+replacing fifty lines of Perl. Or consider the following one-line
+keyword-in-context generator:
+</p><pre>	&lt;G&gt;\P &lt;G&gt; &lt;G&gt; &lt;G&gt; &lt;G&gt; = @fill-right{@repeat{40;\ };$1 $2} $3 $4 $5\n
+</pre>
+
+<p>Although such brevity has always always appealed to me in Gema, I
+used to feel guilty about it, because APL has given brevity in
+programming languages such a bad name. Eventually, however, I came to
+feel that Gema was not in fact a "write-once" language, but rather that
+its brevity most of the time comes from the fact that its solutions
+have such a good fit with the problem space. It seems to me that the
+one-line KWIC generator is a very natural expression of what we might
+have given the algorithm to be: "When you find five graphic character
+tokens separated by white space, print the first two of them
+right-justified in a field of forty blanks, print the rest of them, and
+end the line, then continue processing just after the first of the
+tokens." When the solution space matches the problem space, verbosity
+ceases to be a desideratum.
+</p><h2>2. Gema as a Text Transformation Engine</h2>
+
+<h3>A Rule-based, Non-Procedural Language</h3>
+
+<p>Like Awk, Gema is a rule-based, non-procedural language, and this is
+the essence of its charm for me. Rule-based rewriting systems have been
+extensively studied in computer science, but here I wish to stress not
+their theoretical advantages but rather their practical ones. They go
+far beyond the simple notational convenience of not having to be
+constantly manipulating file pointers or nesting control structures. It
+is rather that the language has built into it a powerful processing
+engine that is almost impossible to reproduce in a procedural language.
+</p><p>Consider the simple problem of replacing single quotes with
+double quotes, except when the quotation is within parentheses. In Gema
+this is expressed quite naturally as
+</p><pre>	(&lt;u&gt;)=$0
+	'="
+</pre>
+
+<p>In a regular-expression-based, procedural language, implementing
+this trivial task requires many lines of complex code, because you
+either have to preprocess the input to somehow seal off the
+parenthesized expressions before changing the quotation marks, or write
+a tokenizer that maintains state and skips ahead to the closing
+parenthesis. In practice, handling nested constructs with regular
+expressions is so complex that many programmers opt for an approximate
+solution that works most of the time. "We'll never have "&lt;/li&gt;"
+and "&lt;/ul&gt;" on the same line-will we?" In Gema, all this
+maintaining of state is done by the transformation engine, and does not
+have to appear in the user's code.
+</p><h3>Patterns That Span Lines</h3>
+
+<p>A fine example of how Gema is tuned for its problem domain is the
+fact that it supports patterns which cross line boundaries. All the
+other languages in our survey are line-oriented, whereas most text
+transformation problems involve multi-line units. It may seem like a
+small point, but the truth is that such line orientation is a constant
+source of impedance mismatch which obfuscates the solution space. It
+means that Grep has no equivalent to Gema's
+</p><pre>	Gema -match Error\:\n&lt;U&gt;\n
+</pre>for printing out error messages that are two lines long. It means
+that the first thing many Perl programs do is to read their input into
+a large array and delete the line ends. It means that in Awk you can't
+simply write
+<pre>	(&lt;U&gt;)=@process($0)
+</pre>
+
+to process all parenthesized expressions, or
+
+<pre>	\&lt;table\&gt;&lt;U&gt;\&lt;\/table\&gt;=@table{$0}
+</pre>to process an HTML table. And so on and so forth. (I should note
+that Gema does support a line-oriented mode for those cases when it is
+appropriate.)
+<h3>Recognizers and Escape Sequences</h3>
+
+<p>The dominant pattern-matching paradigm in computer technology today
+is the regular expression, which I think is a pity, because regular
+expressions are really a cumbersome and error-prone matching
+technology. Gema supports them, and they can occasionally be useful,
+but for most purposes what Gema calls recognizers and escape sequences
+prove to be more convenient.
+</p><p>Recognizers have two main advantages over regular expressions.
+The first is that where regular expressions are "greedy", swallowing up
+as much of their input as possible, recognizers are generous, and only
+nibble as much of their input as possible, which is almost always what
+is wanted. Given the input
+</p><pre>	The owner of the dog had an unquenchable hatred of dogma
+</pre>
+
+the regular expression pattern "/[A-Za-z ]+dog/=($0)" returns
+
+<pre>	(The owner of the dog had an unquenchable hatred of dog)ma
+</pre>
+
+whereas the recognizer pattern "&lt;U&gt;dog=($1) returns
+
+<pre>	(The owner of the dog) had an unquenchable hatred of dogma
+</pre>
+
+<p>Of course, this greediness of regular expressions is especially
+undesirable in Gema because it is not by default line-oriented, so that
+the first pattern above would return everything up to the very last
+"dog" in the file, which could be thousands of lines. As I say, this is
+hardly ever what you want.
+</p><p>The second advantage of recognizers over regular expressions is
+that they provide a well-engineered repertoire of matching primitives
+that are very convenient for building up complex matches. Of course,
+many regular-expression-based languages beef up regular expressions
+with special notations for matching at the beginning of a line and so
+forth, but few of them have the wide range of recognizers built into
+Gema. Control characters, punctuation, the various flavors of letters
+and digits and identifier characters and filename characters, all are
+available in a compact notation. No more writing "[A-Za-z0-9_-]+" for
+an identifier or "[;.!@#$%^&amp;*()]" for punctuation: instead we can
+write &lt;I&gt; and &lt;Y&gt;.
+</p><p>More importantly, Gema's recognizers can be parameterized for
+the length of the string being matched, made optional, and negated. For
+example, to recognize dates written in the international standard
+format YYYY-MM-DD, one can write
+</p><pre>	&lt;D4&gt;-&lt;D2&gt;-&lt;D2&gt;
+</pre>
+
+<p>Without this ability to conveniently bound the length of the match,
+many pattern-matching tasks become more error-prone. Compare the
+strings matched by the pattern above with these matched by
+"[0-9]+-[0-9]+-[0-9]+".
+</p><p>The ability to negate these recognizers makes the system still
+more flexible. Need to find all punctuation marks that are not
+preceeded by a letter? The pattern
+</p><pre>	&lt;-L&gt;&lt;Y1&gt;
+</pre>
+
+is what you need. Finally, recognizers can be made optional by writing them in lower case. For example,
+
+<pre>	&lt;I&gt;&lt;c&gt;
+</pre>
+
+will match all identifiers along with the control characters that come after them, if there are any.
+
+<h3>User-Defined Recognizers</h3>
+
+<p>To my way of thinking the essential innovation in Gema is its
+support for user-defined recognizers. It is this that allows you to
+write grammars in Gema that are self-executing. In this article we will
+look at user-defined recognizers from two perspectives. In this section
+we will view them as an extension of the built-in recognizer mechanism,
+while in
+section 2.6 we will view them as providing multiple sets of
+transformation rules at the same time.
+</p><p>But for now, let us consider the (admittedly artificial)
+problem of recognizing a construct that consists of the word "dog",
+4-digit numbers, identifiers whose third character is "e", and all
+strings consisting of two hexadecimal digits followed by a punctuation
+mark. Let us call such an ungodly construct "whacko". What we would
+like is to be able to write Gema rules with a "whacko" recognizer in
+just the same way we write rules with the built-in recognizers. For
+example, we might want to process all sequences where a whacko is
+preceded by the word the and followed by an identifier:
+</p><pre>	the &lt;whacko&gt; &lt;I&gt;=@process{$0}
+</pre>Gema allows us to do exactly that. How do we define what a whacko
+is? Gema has a very pure programming model: everything is done with
+pattern-matching whenever possible, so it should come as no surprise
+that it uses transformation rules to specify user-defined recognizers.
+Here is the definition of a whacko:
+<pre>	whacko:dog=$0@end
+	whacko:&lt;D4&gt;=@end
+	whacko:&lt;I2&gt;e&lt;i&gt;=@end
+	whacko:&lt;X2&gt;&lt;Y1&gt;=@end
+	whacko:=@terminate
+</pre>Notice that there is a one-to-one correspondence between the
+components in the natural-language specification and its implementation
+in Gema.
+<p>The use of user-defined recognizers lets us write Gema rule sets
+that are to all intents and purposes self-executing grammars. For
+example, here is the BNF notation for an XML attribute list declaration
+taken straight out of the XML 1.0 specification:
+</p><pre>	AttlistDecl	::= 	'&lt;!ATTLIST' S Name AttDef* S? '&gt;'
+</pre>
+
+In Gema this can be written as:
+
+<pre>	AttlistDecl:'&lt;!ATTLIST'&lt;S&gt;&lt;Name&gt;&lt;AttDef&gt;&lt;s&gt;'&gt;'
+</pre>
+
+Apart from the white space, this is clearly isomorphic to the BNF.
+<p>I am not necessarily advocating Gema as a replacement for parser
+generators; I sometimes think that I may go too far in using Gema as a
+quick way to implement solutions that in the long run might be better
+done with dedicated formal-language processing systems. I think Gema is
+most appropriate for situations where writing a BNF grammar is
+unfeasible. The point I am trying to make is simply that user-defined
+recognizers provide a very natural way of implementing formal language
+specifications. </p><h3>Context-Sensitive Matching</h3>
+
+<p>I have often wondered what class of languages Gema can recognize. A
+friend of mine once pointed out that it permits context-sensitive
+parsing, because it permits pattern variables that can be dynamically
+set. For example, consider the problem of matching punctuation marks.
+This can be represented in Gema by the rule
+</p><pre>	&lt;Y1&gt;&lt;u&gt;$1=@process{$0}
+</pre>This rule matches any single punctuation character, followed by
+zero or more other characters, followed by the punctuation character
+that was matched by the first recognizer. This is not limited to
+multiple matches of the same pattern, however, since user-defined
+recognizers can perform arbitrary computations to generate pattern
+variables. Suppose we want to parenthesize pairs of predators and their
+prey. We might write:
+<pre>	&lt;animal&gt;&lt;u&gt;$p=($0)
+
+	animal:cat=$0@set{p;mice}
+	animal:heron=$0@set{p;fish}
+</pre>
+
+Then if the input is 
+
+<pre>	The cat eats mice, the heron eats fish.
+</pre>
+
+The output will be
+
+<pre>	The (cat eats mice), the (heron eats fish).
+</pre>
+
+This is a powerful capability that although not used very frequently, is extremely useful when the need arises.
+
+<h3>Multiple Rule Sets</h3>
+
+<p>Up till now we have focused on the recognition portion of Gema; now
+it is time to consider the actions that can be applied to the input
+that is recognized. Gema provides the usual set of predefined
+functions, for arithmetic, string manipulation, file handling, text
+formatting, operating system calls, and the like.
+</p><p>In addition, Gema provides for user-defined functions. I have
+stressed that one of the things I like about the language is its
+consistent, unified computational model, so it should come as no
+surprise to learn that these user-defined functions are defined as
+rule-based transformations. In fact, user-defined functions are one and
+the same thing as user-defined recognizers: any function can be used as
+a recognizer and vice-versa.
+</p><p>Consider for example a reduplicative function that reduplicates its input, turning "ma" into "ma-ma", "ba" into "ba-ba", etc.
+
+</p><pre>	redup:&lt;I&gt;=$1-$1
+</pre>
+
+On the left side of a transformation this can be used as a recognizer:
+
+<pre>	&lt;redup&gt;=$0
+</pre>while on the right-hand side it can be used as a function. If the
+task were to reduplicate names that started with J, for example, we
+might write
+<pre>	J&lt;I&gt;=@redup{$0}
+</pre>This ability to build up a repertoire of patterns that can be
+selected depending on the context encourages a divide-and-conquer
+approach and makes for more robust programs because it simplifies the
+amount of detail that needs to be considered; it provides a form of
+lexical scoping and information hiding. To take a real-world example,
+in processing HTML text it is convenient to be able to write e.g.
+<pre>\&lt;table\&gt;&lt;U&gt;\&lt;\/table\&gt;=@table{$1}
+</pre>In writing the rules for the "table" domain, I can focus on the
+table element because I know that everything else has been filtered out
+by the higher-level domain.
+<p>I can hear the sarcastic voice of the skeptics. "Ooh, ooh, isn't
+that cool-Gema's got -eek, eek-subroutines!!!'" Indeed, I find it
+difficult to convey the synergistic power of this subroutine-as-ruleset
+paradigm. Part of it, to be sure, is the generality of being able to
+define the syntax of the parameters. Want to use commas to separate
+parameters? It's easy:
+</p><pre>	myfunc:&lt;U&gt;,&lt;U&gt;,&lt;U&gt;=@print{My parameters are $1 $2 $3\n}
+</pre>
+
+Want to use vertical bars instead? OK:
+
+<pre>	myfunc:&lt;U&gt;|&lt;U&gt;|&lt;U&gt;=@print{My parameters are $1  $2  $3\n}
+</pre>Need a variable number of parameters? No problem-just define a
+domain that matches the right input patterns. For example, to set an
+arbitrary number of variables to the empty string:
+<pre>	@init{a, b, c, d, e, f, g...}
+	init:&lt;I&gt;=@set{$1;}
+</pre>
+
+<p>I guess the appeal of Gema's subroutine mechanism comes in part from
+contrasting it to that of Awk and Perl, where the language is split in
+two conflicting parts-the non-procedural, pattern-matching part, and
+the procedural, algorithmic part, with only an awkward interface
+between the two.
+</p><h3>Dynamic Patterns</h3>
+
+<p>Another powerful feature of Gema that is lacking in other text
+processing languages is the ability to define new rules at run-time.
+This lets the program adjust its behavior depending on the input data.
+To take a trivial example, consider the task of listing all the
+distinct words that appear in a text. This is easily accomplished by
+processing each word as it appears, then defining a rule to ignore the
+word from then on:
+</p><pre>	&lt;W&gt;=@process{$1}@define{$1=}
+</pre>Combined with Gema's treatment of files, which returns the file
+contents as the result of the "read" operator, the define operator can
+be used to provide an include mechanism:
+<pre>	@define{@read{newrules}}
+</pre>
+
+has the effect of including the file "newrules" as thought its content occurred textually at the point of the call.
+
+<h3>Recursive Patterns</h3>
+
+<p>I conclude this section on Gema's text transformation capabilities
+with two clean solutions to frequent pattern-matching problems. The
+first is the problem of balanced delimiters. Suppose one wants to
+enumerate all the parenthesized subexpressions in a given input. That
+is, if the input is </p><pre>	((a+b)*(c+d))
+</pre>
+
+we want to print out
+
+<pre>	(a+b)
+	(c+d)
+	((a+b)*(c+d))
+</pre>
+For this, regular expressions and recognizers are inadequate, because
+they terminate prematurely - they don't keep track of their nesting
+level. If we write
+<pre>	(*)=$0@err{$0\n}
+</pre>
+
+we get 
+
+<pre>	((a+b)
+	(c+d)
+	((a+b)*(c+d))
+</pre>because the right parenthesis after "a+b" matches the first left
+parenthesis, not the second one. To get this right, we need Gema's
+recursive argument, represented by '#':
+<pre>	(#)=$0@err{$0\n}
+</pre>This argument performs recursive matches based on the literal
+characters surrounding it. The first recursive match finds '(a+b)', the
+second '(c+d)', etc. This capability is invaluable in dealing with the
+many situations involving nested constructs.
+<h3>User-Specified Match Position</h3>
+
+<p>Finally, no discussion of Gema's power as a text transformation tool
+would be complete without mentioning that it has unlimited look-ahead.
+After any match, no matter how long, the scanning position can be reset
+to any arbitrary point.
+</p><p>We have already seen an example of this. Much of the
+conciseness of the KWIC program cited above comes from the ability to
+reset the scanning position (\P) to the end of the key word, rather
+than the default position at the end of the entire match:
+</p><pre>	&lt;G&gt;\P &lt;G&gt; &lt;G&gt; &lt;G&gt; &lt;G&gt; = @fill-right{@repeat{40;\ };$1 $2} $3 $4 $5\n
+</pre>
+
+In general, look-ahead is a good thing, and the more the better.
+
+<h2>3. Programming</h2>
+
+<p>I conclude by considering three general programming-language
+capabilities which add to Gema's usefulness as a text transformation
+language.
+</p><h3>User-Definable Syntax</h3>The ability to alter the syntax of a
+programming language is currently out of fashion among programming
+language designers, because it can let you shoot yourself in the foot
+in very painful ways, but the truth is that user-definable syntax can
+be a major convenience in the context of text transformation. I have
+already slipped an example in. The default syntax in Gema treats a
+single quotation mark as a literal, but when we wrote the attribute
+declaration list rule, we treated it as a "quote-until-match"
+character, thus matching the XML specification exactly, and relieving
+us of the burden of quoting such characters as the angle brackets and
+the exclamation point:
+<pre>	AttlistDecl:'&lt;!ATTLIST'&lt;S&gt;&lt;Name&gt;&lt;AttDef&gt;&lt;s&gt;'&gt;'
+</pre>
+
+<p>A frequent use of syntax redefinition is in dealing with SGML texts,
+where the angle brackets and solidus conflict with their default use in
+Gema. In the redefined syntax, we write recognizers with square
+brackets instead of angle brackets: [I] instead of &lt;I&gt;, and so
+forth. The ability to redefine the comment character is also frequently
+useful.
+</p><p>To provide an extreme example, there is no reason the Gema fragment
+
+</p><pre>	! Cats eat mice
+	animal:cat=$0@set{p;mice}
+</pre>
+
+could not be written
+
+<pre>	= Cats eat mice
+	animal$cat&amp;^0_set[p~mice]
+</pre>
+
+The total illegibility of this example may also serve as a reminder that such syntactic tinkering should be kept to a minimum.
+
+<h3>Operating System Interface</h3>
+
+<p>Unlike Perl, Gema does not aim first and foremost to be a language
+for system programming tasks. Nevertheless, it does provide the basics:
+environment variables can be queried, pathnames manipulated, and
+operating system commands executed. The only serious restriction is
+that because a design goal was to implement Gema in pure ANSI C,
+executing a command does not return its value, thus requiring the use
+of temporary files. Despite this restriction, Gema's facilities in this
+area are adequate to allow it to be used for many
+system scripting tasks. </p><h3>Command-Line Extension</h3>
+
+<p>Finally, we should mention that like Perl, Gema supports extensions
+to its command-line processing. It should come as no surprise that this
+processing is driven by pattern-matching. Even the "built-in"
+command-line processing is done via pattern matching, and can be
+entirely replaced by the user if so desired.
+</p><p>For example, a "count" parameter can be passed to Gema by adding the following rule to the special ARGV domain:
+
+</p><pre>	ARGV:\N-count\n*\n=@set{count;$1}
+</pre>To my mind, this should be compared to the complex,
+never-quite-right packages for command-line processing that are endemic
+to languages like Perl.
+<h2>4. Conclusion</h2>
+<b>TBD</b>
+<br>
+<h2>Appendix 1: Quick Examples of Gema's Default Syntax</h2>
+
+<br>
+<br>
+<table bgcolor="#ffff99" border="1" cellpadding="3" cellspacing="0">
+<tbody><tr><th>Construct</th><th>Example</th><th>Meaning</th></tr>
+<tr><td>Recognizer</td><td>&lt;L&gt;</td><td>Match any string of letters</td></tr>
+<tr><td>Escape Sequence</td><td>\W</td><td>Match optional white space</td></tr>
+<tr><td>Domain</td><td>table:tree=bush</td><td>When processing a table, replace "tree" with "bush"</td></tr>
+<tr><td>Variable Reference</td><td>${count}</td><td>The value of the variable "count"</td></tr>
+<tr><td>Function Call</td><td>@fill-right{000;${count}}</td><td>Call the function "fill-right" with the parameters "000" and "${count}"</td></tr>
+</tbody></table>
+
+<h2>Appendix 2: The Gema Challenge</h2>
+
+<p>Here are 13 simple transformation tasks and their implementation in Gema. The challenge is to re-code these
+in your favorite programming languages for purposes of comparative linguistics. A test suite is available upon request
+
+</p><ol>
+<li>Replace all single quotes (') by double quotes (") except within comments delimited by "{" and "}".
+
+<pre>{&lt;u&gt;}=$0
+'="
+</pre>
+
+</li><li>Replace all identifiers that are followed by white space with "X".
+
+<pre>&lt;I&gt;&lt;S&gt;=X$2
+</pre>
+
+</li><li>Surround all dates written in international standard form
+(4-digit year, "-", 2-digit month, "-", 2-digit day, " ", 2-digit hour,
+":", 2-digit minute, ":" 2-digit second) with "[" and "]".
+<pre>&lt;D4&gt;-&lt;D2&gt;-&lt;D2&gt; &lt;D2&gt;\:&lt;D2&gt;\:&lt;D2&gt;=[$0]
+</pre>
+</li><li>Delete all occurrences of the word "dog" that are not immediately followed by punctuation.
+
+<pre>dog&lt;-Y&gt;=$2
+</pre>
+
+</li><li>Parethesize all sequences of letters followed by up to four digits (if the letters are followed by five
+or more digits, do nothing).
+
+<pre>&lt;L&gt;&lt;d5&gt;\X=($0)
+</pre>
+
+</li><li>A whacko is a sequence of any of the following: the word "dog", 4-digit numbers, identifiers whose
+third character is "e", and all strings consisting of two hexadecimal digits followed by a punctuation mark,
+and surrounding white space, occurring in any order. Parenthesize all whackos in the input text.
+
+<pre>&lt;whacko&gt;=($0)
+
+whacko:dog=$0
+whacko:\X&lt;D4&gt;\X=$0
+whacko:&lt;I2&gt;e&lt;i&gt;=$0
+whacko:&lt;s&gt;&lt;X2&gt;&lt;Y1&gt;&lt;s&gt;=$0
+whacko:=@terminate
+</pre>
+
+</li><li>Write a recognizer which parenthesizes opening XML-style tags defined by the following BNF fragments:
+
+<pre>OpenTag	::= 	'&lt;' Id S Attributes S? '&gt;'
+Attributes :: Id S? '=' S? '"' Chars '"' S?
+</pre>
+
+Use any convenient definition for "Id" and "Char".
+
+<pre>\&lt;&lt;I&gt; &lt;Attributes&gt;\&gt;=($0)
+Attributes:&lt;I&gt;&lt;s&gt;\=&lt;s&gt;"&lt;U&gt;"&lt;s&gt;=$0;=@terminate
+</pre>
+
+</li><li>Parenthesize all balanced vowel strings. Examples: for(eve)r h(ead rea)der bl(indi)ng.
+
+<pre>&lt;funny&gt;*$1=($0)
+
+funny:a=$0;e=$0;i=$0;o=$0;u=$0;=@terminate
+</pre>
+
+</li><li>Parenthesize all sequences of predators, eating verbs, and appropriate prey, given the following
+table of predators and prey
+
+<pre>cats       mice
+herons     frogs
+dogs       rabbits
+</pre>
+
+and given that the eating verbs are "eat", "devour", "kill", and "consume".
+
+<pre>&lt;predator&gt; &lt;consume&gt; $p=($0)
+
+predator:cats=$0@set{p;mice}
+predator:herons=$0@set{p;frogs}
+predator:dogs=$0@set{p;rabbits}
+predator:=@terminate
+
+consume:eat=$0@end;devour=$0@end;kill=$0@end;consume=$0@end;=@end
+
+</pre>
+
+</li><li>Change "A" to "X" within parenthesized expressions. Elsewhere, reduplicate all identifiers (Ma becomes Ma-Ma, 
+Jon becomes Jon-Jon, etc) within single quotes.
+
+<pre>(#)=@AtoX{$0}
+'&lt;U&gt;'=@redup{$0}
+
+AtoX:A=X
+
+redup:&lt;I&gt;=$1-$1
+</pre>
+
+</li><li>The input file consists of some text interspersed with macro definitions and undefinitions. Process the
+text according to the macros. Macros consist of the word MACRO at the beginning of the line, followed by
+space, the identifier for the macro, another space, and the body of the macro. Undefinitions consist of the
+word UNDEFINE at the beginning of a line; they are followed by white
+space and the identifier for the macro that is to be undefined.
+
+<pre>\NMACRO &lt;I&gt; &lt;U&gt;\n=@define{$1\=$2}
+\NUNDEFINE &lt;I&gt;\n=@undefine{$1}
+</pre>
+
+</li><li>Surround all balanced expressions delimited by "[" and "]" with the words "BRACK" and "KCARB".
+
+<pre>[#]=BRACK $0 KCARB
+</pre>
+
+</li><li>Capitalize all identifiers such that the 6th word after them is an identifier ending in "e".
+
+<pre>&lt;I&gt;\P &lt;I&gt; &lt;I&gt; &lt;I&gt; &lt;I&gt; &lt;I&gt; &lt;I&gt;e\X=@capitalize{$1}
+
+capitalize:&lt;A1&gt;&lt;u&gt;=@upcase{$1}@downcase{$2}
+
+</pre>
+</li></ol>
+
+<script language="Javascript">
+<!--
+
+// FILE ARCHIVED ON 20050209203237 AND RETRIEVED FROM THE
+// INTERNET ARCHIVE ON 20090923175950.
+// JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+// ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+// SECTION 108(a)(3)).
+
+   var sWayBackCGI = "http://web.archive.org/web/20050209203237/";
+
+   function xResolveUrl(url) {
+      var image = new Image();
+      image.src = url;
+      return image.src;
+   }
+   function xLateUrl(aCollection, sProp) {
+      var i = 0;
+      for(i = 0; i < aCollection.length; i++) {
+         var url = aCollection[i][sProp];         if (typeof(url) == "string") { 
+          if (url.indexOf("mailto:") == -1 &&
+             url.indexOf("javascript:") == -1
+             && url.length > 0) {
+            if(url.indexOf("http") != 0) {
+                url = xResolveUrl(url);
+            }
+            url = url.replace('.wstub.archive.org','');
+            aCollection[i][sProp] = sWayBackCGI + url;
+         }
+         }
+      }
+   }
+
+   xLateUrl(document.getElementsByTagName("IMG"),"src");
+   xLateUrl(document.getElementsByTagName("A"),"href");
+   xLateUrl(document.getElementsByTagName("AREA"),"href");
+   xLateUrl(document.getElementsByTagName("OBJECT"),"codebase");
+   xLateUrl(document.getElementsByTagName("OBJECT"),"data");
+   xLateUrl(document.getElementsByTagName("APPLET"),"codebase");
+   xLateUrl(document.getElementsByTagName("APPLET"),"archive");
+   xLateUrl(document.getElementsByTagName("EMBED"),"src");
+   xLateUrl(document.getElementsByTagName("BODY"),"background");
+   xLateUrl(document.getElementsByTagName("TD"),"background");
+   xLateUrl(document.getElementsByTagName("INPUT"),"src");
+   var forms = document.getElementsByTagName("FORM");
+   if (forms) {
+       var j = 0;
+       for (j = 0; j < forms.length; j++) {
+              f = forms[j];
+              if (typeof(f.action)  == "string") {
+                 if(typeof(f.method)  == "string") {
+                     if(typeof(f.method) != "post") {
+                        f.action = sWayBackCGI + f.action;
+                     }
+                  }
+              }
+        }
+    }
+
+
+//-->
+</script>
+
+<script>function PrivoxyWindowOpen(a, b, c){return(window.open(a, b, c));}</script>
+<div style="padding: 4px 4px 4px 40px; background-image: url(resource://noscript_0.7665412397404456/icon32.png); background-repeat: no-repeat; background-position: 2px; display: block; min-height: 32px; text-align: left;"><a href="http://web.archive.org/web/20050209203237/">http://web.archive.org/web/20050209203237/</a><br><a href="http://www.anthus.com.wstub.archive.org/Gema/.wstub.archive.org">http://www.anthus.com.wstub.archive.org/Gema/.wstub.archive.org</a><br></div></body></html>
