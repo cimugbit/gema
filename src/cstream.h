@@ -123,6 +123,9 @@ void cos_close(COStream s);
 /* create buffer to hold output and then read it back in */
 COStream make_buffer_output_stream(void);
 CIStream convert_output_to_input( COStream out );
+#ifdef LUA
+char* cos_whole_string ( COStream s );
+#endif
 char* cis_whole_string ( CIStream in );
 unsigned cis_length( CIStream in );
 

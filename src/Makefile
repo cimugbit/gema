@@ -148,14 +148,14 @@ t_gel:
 tarball:
 	@cd .. ;\
 	rm -rf tarball ;\
-    mkdir tarball ;\
+	mkdir tarball ;\
 	cd tarball ;\
 	cvs export -Dtomorrow gema ;\
 	tar cvfz gema.tgz gema ;\
 	mv gema.tgz ../gema_`date +%Y%m%d`.tgz ;\
 	cd .. ;\
 	rm -rf tarball
-          
+
 # .% File dependencies
 
 # .%% Gema files
