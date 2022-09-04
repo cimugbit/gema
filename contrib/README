@@ -1,0 +1,6 @@
+gema.pats
+    Syntax highlighting patterns for NEdit
+
+TEMPLATE.gema
+    Template for Gema scripts with argument parsing and support for usage info
+    by invoking with -h

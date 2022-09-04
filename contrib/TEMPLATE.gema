@@ -1,0 +1,74 @@
+#!/bin/sh
+! true; exec gema -prim $0 ${1+"$@"}
+ARGV:\A\n-h\n\Z=@out{\
+\n\
+SYNOPSIS\n\
+\n\
+Usage\:\n\
+\n\
+\   COMMAND [-o \<outputfile\>] [\<inputfile\>|- [\<outputfile\>|-]]\n\
+\   find ... | COMMAND ...\n\
+\n\
+Parameters\:\n\
+\n\
+\   PARAMETER\n\
+\n\
+\   -o    Set output file. Default is stdout.\n\
+\n\
+TEXT\n\
+\n\
+Without the input file parameter input is read from stdin.\n\
+Without file parameters input is read from stdin.\n\
+Without file parameters input is read from stdin and output is written to\n\
+stdout.\n\
+\n\
+}@end
+! -- alternatively (begin) --
+! ARGV:\A\n-h\n\Z=@out{${help1}${help2}${help3}}@end
+! @set{help1;\
+! \n}
+! @set{help2;\
+! \n}
+! @set{help3;\
+! \n}
+! -- alternatively (end) ---
+ARGV:<OPTIONS><PARAMETERS>=@write{${output;-};@{@read{${input;-}}}}
+! -- alternatively (begin) --
+! ARGV:<OPTIONS><PARAMETERS>=@write{${output;-};@feed-input{@read{-}}}
+! ! read filenames line by line and submit into processing
+! feed-input:<F>\n=@{@read{$1}}
+! -- alternatively (end) ---
+! -- alternatively (selectable processing) --
+! ARGV:<OPTIONS><PARAMETERS>=@write{-;@cmps{${target;};html;;@html{@read{${input;-}}};@plaintext{@read{${input;-}}}}}
+! OPTION:t\W<F>\P\n=@set{target;$1}
+! -- alternatively (end) ---
+OPTIONS:\N--\n=@end;\N-<OPTION>=;\P\N<G1>=@end
+OPTION:\A\n=@fail;\n=@end
+! OPTION:x=@set{x;1}
+! OPTION:y\W<U>\P\n=@set{y;$1}
+! OPTION:o\W<F>\P\n=@set{output;$1}
+OPTION:d=@define{DEBUG\: \*\=\@err\{\* (\@file\\\@\@line\\\/\@column)\\N\}}
+OPTION:<G1>=@err{Invalid option: -$1\N}@abort
+! PARAMETERS:\A\Z=@err{Missing parameter\N}@abort
+! PARAMETERS:\A<F>\n<F>\n\Z=@set{input;$1}@set{output;$2}
+! PARAMETERS:\A<F>\n\Z=@set{input;$1}
+! -- alternatively (begin) ---
+! ! need to remove action in ARGV!
+! PARAMETERS:\A\Z=@write{${output;-};@{@read{-}}}
+! PARAMETERS:\N<F>\n=@write{${output;-};@{@read{$1}}}
+! -- alternatively (end) ---
+PARAMETERS:\N<U>\n=@err{Invalid parameter: $1\N}@abort
+
+!===============================================================================
+
+dirname:<u>\/=$0;=@end
+basename:<u>\/=
+
+DEBUG:*=
+DEBUG:*=@err{* @file\@@line\/@column\N}
+TRACEDEF:<I>=@define{TRACE$0:\\P\?\=\@err\{TRACE$0 \@file\\\@\@line\\\/\@column \\\= \@quote\{\?\}\\N\}\@end};,=;?=@err{TRACEDEF: ungültiges Zeichen: ?\N}@abort
+@TRACEDEF{1,2,3,3,4,5,6,7,8,9}
+
+
+
+?=
