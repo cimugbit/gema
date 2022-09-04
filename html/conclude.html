@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Gema</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.b16 {
+	font-size: 16pt;
+	font-weight: bold;
+}
+
+.a0 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: none;
+	color: #333366;
+}
+
+.a1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: underline;
+	color: #990000;
+}
+-->
+</style>
+<script language="JavaScript">
+var s="<a href=\""
+var r="mail"
+function a(w,x,y)
+{ t=y+"@"+x+"."+w;  document.write(s+r+"to:"+t+"\">")}  
+</script>
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="1">
+  <tr> 
+    <td width="240" height="62" valign="top" background="topbkg1.gif"><img src="logo2.jpg" width="265" height="52"></td>
+    <td width="45" background="topbkg2.gif">&nbsp;</td>
+    <td align="center" valign="middle" background="topbkg3.gif"><font size=-1>&nbsp;<br>
+      </font> | <a href="index.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">About</a> 
+      | <a href="dnld.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Downloads</a> 
+      | <a href="docs.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Documents</a> 
+      | <a href="links.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Links</a> 
+      |</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top" class="tr">
+      <br>
+      <H2><A name=5Custmcmmnprcs>5</A> Customized command-line processing&nbsp;&nbsp;
+ <a href="function.html#4.9Infrmfunct" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#6Extcds" class="ssm"><font size="-1">next</font></a></H2>
+<P>Part of the intent of <B>gema</B> is that it can be used as a means of 
+implementing more specialized tools. A utility program is defined by the command 
+line arguments that it uses as well as by how it processes its input files. 
+Therefore, <B>gema</B> provides a way to customize the handling of command line 
+arguments. 
+<P>The main program of <B>gema</B> just does some initialization, and then 
+processes the command line arguments by translating them with a set of built-in 
+patterns. These rules that define the command line arguments are defined in a 
+domain named ``<TT>ARGV</TT>''. The user is free to add additional rules to this 
+domain, thereby implementing new command line options, or even to undefine 
+existing rules. In the input stream that is translated by the <TT>ARGV</TT> 
+domain, the command line arguments are separated by newline characters.[<A 
+name="fn1_b" href="#FN1">Footnote 
+1</A>] The actions for the <TT>ARGV</TT> rules are expected to do all their work 
+with side-effects and to not return any value. Any value that is returned by the 
+translation (except for the delimiting newlines) will be reported by the main 
+program as undefined arguments. 
+<P>The complete set of built-in <TT>ARGV</TT> rules can be seen by looking at 
+the source file ``<TT>gema.c</TT>'' in the variable <TT>argv_rules</TT>. Here 
+are a few representative examples: <PRE>  ARGV:\N-idchars\n*\n=@set-parm{idchars;$1}
+  ARGV:\N-literal\n*\n=@set-syntax{L;$1}
+  ARGV:\N-p\n*\n=@define{*}
+  ARGV:\N\L*\=*\n=@define{$0}
+  ARGV:\N-odir\n*\n=@set{.ODIR;*}
+  ARGV:\N-&lt;L1&gt;\n=@set-switch{$1;1}
+  ARGV:\N-*\n=@err{Unrecognized option\:\ "-*"\n}@exit-status{3}
+</PRE>
+<P>For an example of extending the command line options, suppose you wanted to 
+emulate a C pre-processor by accepting ``<TT>-D</TT>'' options to define macros. 
+That could be done by defining rules such as: <PRE>  ARGV:\N-D&lt;I&gt;\=*\n=@define{\\I$1\\I\=@quote{$2}}
+  ARGV:\N-D&lt;I&gt;\n=@define{\\I$1\\I\=1}
+</PRE>
+<P>Instead of adding to the built-in rules, it is also possible to suppress the 
+built-in rules and define your own rules from scratch. To do this, start the 
+program with a command line like:<BR><TT>gema -prim </TT><EM>pattern-file 
+...</EM> <BR>The <TT>-prim</TT> (``primitive mode'') option suppresses loading 
+of the built-in rules and reads patterns from the specified file. Then the 
+remainder of the command line is processed according to whatever <TT>ARGV</TT> 
+rules were defined in that file. Note that even the default behavior of reading 
+from standard input and writing to standard output is implemented by the 
+<TT>ARGV</TT> rules. (The <TT>-prim</TT> option is the only one that is 
+hard-coded instead of being implemented by patterns.) 
+<p align="right"> <a href="#5Custmcmmnprcs" classe="ssm">up</a>&nbsp;</p>
+<H2><A name=6Extcds>6</A> Exit codes&nbsp;&nbsp;
+ <a href="#5Custmcmmnprcs" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#7SttusndFuturdvl" class="ssm"><font size="-1">next</font></a></H2>
+ When the program terminates, it will 
+return one of the following status codes to the operating system (unless 
+overridden by the use of function <TT>@exit-status</TT>): 
+<DL>
+  <DT>0
+  <DD>nothing wrong 
+  <DT>1
+  <DD>(reserved for user via <TT>@exit-status{1}</TT>) 
+  <DT>2
+  <DD>failed match signaled by <TT>@fail</TT> or <TT>@abort</TT> 
+  <DT>3
+  <DD>undefined command line argument 
+  <DT>4
+  <DD>syntax error in pattern definitions 
+  <DT>5
+  <DD>use of undefined name during translation (domain, variable, switch, 
+  parameter, syntax type, or locale) 
+  <DT>6
+  <DD>invalid numeric operand 
+  <DT>7
+  <DD>can't execute shell command for <TT>@shell</TT> function 
+  <DT>8
+  <DD>I/O error on input file 
+  <DT>9
+  <DD>I/O error on output file 
+  <DT>10
+  <DD>out of memory </DD></DL>
+<p align="right"> <a href="#6Extcds" classe="ssm">up</a>&nbsp;</p>
+<H2><A name=7SttusndFuturdvl>7</A> Status and Future development&nbsp;&nbsp;
+ <a href="#6Extcds" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#8Acknw" class="ssm"><font size="-1">next</font></a></H2>
+<P>This program is now at the stage where in an ideal world it should be 
+regarded as a completed prototype, and it would now be the time to start 
+designing the real program to replace it. However, as usually happens in the 
+real world, we ship the prototype because there isn't time to do any more. There 
+is room for improvement in the areas of consistency, ease of use, and 
+performance at least. Also, this documentation was written rather hurriedly and 
+is not nearly as polished as I would like. 
+<P>Since this was developed by one person as a spare time hobby, it has not had 
+very extensive testing, so there are likely to be bugs. The <TT>-w</TT> and 
+<TT>-t</TT> options are the most recently added functionality, and hence the 
+most likely to have inadequacies. 
+<P>I don't know at this time whether I will be spending any more effort on 
+further development, but I am interested in hearing about any bugs found or 
+other suggestions. 
+<P>Following, in no particular order, are some assorted ideas for enhancements 
+which remain for the future: 
+<UL>
+  <LI>Should warn about a domain that is defined but not referenced, since it it 
+  easy to mistakenly neglect to quote a colon. 
+  <LI>It might be useful to have a way to switch (or <EM>push</EM> and 
+  <EM>pop</EM>) the output file - e.g. to write each chapter of a document to a 
+  separate file even though the input might be a single file. 
+  <LI>A function to construct a unique pathname for a temporary file. 
+  <LI>A default notation for quoting a long section of literal text, in addition 
+  to using the backslash for quoting individual characters. 
+  <LI>A function to return the pathname of the current directory. 
+  <LI>Record the file and line that each rule came from, to be used in run-time 
+  error messages. 
+  <LI>Improved trace mode as an aid for debugging pattern files. 
+  <LI>A template operator for specifying an action to be taken after all input 
+  files have been processed. </LI></UL>
+<p align="right"> <a href="#7SttusndFuturdvl" classe="ssm">up</a>&nbsp;</p>
+      <H2><A name=8Acknw>8</A> Acknowledgments&nbsp;&nbsp; <a href="#7SttusndFuturdvl" class="ssm"><font size="-1">prev</font></a> 
+        <a href="#toc" class="ssm"><font size="-1">toc</font></a></H2>
+<P>This program was conceived as an extension of the concepts embodied in W. M. 
+Waite's ``STAGE2'' processor [<A 
+name="fn2_b" href="#FN2">Footnote 
+2</A>], as implemented by Roger Hall.[<A 
+name="fn2_b" href="#FN3">Footnote 
+3</A>] 
+<P>This program has some similarities to <TT>awk</TT>, but they are generally 
+due more to similarity of purpose than to any deliberate copying. I did copy the 
+<TT>$0</TT> notation and adopt the term <EM>action</EM>. 
+<P>This program was designed and coded by myself, David N. Gray, except for the 
+regular expression processor, which utilizes public domain code written by Ozan 
+S. Yigit and updated by Craig Durland and Harlan Sexton. David A. Mundie [<A 
+name="fn4_b" href="#FN4">Footnote 
+4</A>] supplied modifications to enable use on the Macintosh, and offered some 
+helpful comments. </P>
+<p align="right"> <a href="#8Acknw" classe="ssm">up</a>&nbsp;</p>
+<br>&nbsp;
+<hr>&nbsp;
+<a name="toc"></a>
+<H2>Table of Contents</H2>
+<A href="gema_ref.html#1Intrd">1 Introduction</A><BR>
+<A href="gema_ref.html#2OprtOvrv">2 Operational Overview</A><BR>
+<A href="notation.html#3Ntt">3 Notation<BR></A>
+&nbsp;&nbsp;<A href="notation.html#3.1Spcchrc">3.1 Special characters<BR></A>
+&nbsp;&nbsp;<A href="notation.html#3.2EscpSqun">3.2 Escape Sequences<BR></A>
+&nbsp;&nbsp;<A href="notation.html#3.3Rcgnrgumn">3.3 Recognizer arguments<BR></A>
+<A href="function.html#4BultFunct">4 Built-in Functions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.1Numbr">4.1 Numbers<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.2Strngfunct">4.2 String functions<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.1Outputfrmtpddn,flln,ndwrpp">4.2.1 Output formatting -- padding, filling, and wrapping<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.2StrngCmpr">4.2.2 String Comparison<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.3Cscnvr">4.2.3 Case conversion<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.4Msclstrngfunct">4.2.4 Miscellaneous string functions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.3Vrb">4.3 Variables<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.4Fls">4.4 Files<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.4.1Pthnmnpu">4.4.1 Pathname manipulation<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.4.2Usngltrnnputndutputfls">4.4.2 Using alternate input and output files<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.4.3Flcntxqur">4.4.3 File context queries<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.5Cntrflwfunct">4.5 Control flow functions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.6Othrprtsystmntrf">4.6 Other operating system interfaces<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.7Dfn">4.7 Definitions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.8SttnOptn">4.8 Setting Options<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.9Infrmfunct">4.9 Informational functions<BR>
+</A> <A href="function.html#4.10Lrltdfnctns"> </A> <A href="conclude.html#5Custmcmmnprcs">5 
+Customized command-line processing<BR>
+</A>
+<A href="conclude.html#6Extcds">6 Exit codes<BR></A>
+<A href="conclude.html#7SttusndFuturdvl">7 Status and Future development<BR></A>
+<A href="conclude.html#8Acknw">8 Acknowledgments</A> 
+<br>&nbsp;
+<hr>&nbsp;
+<br>&nbsp;
+<H2>Footnotes</H2>
+<P><A name=FN1><strong>Footnote 1</strong></A>:<BR>The newline was chosen for convenience, but it 
+would more exactly emulate the C argument semantics if the NUL character was 
+used as the separator, and perhaps that ought to be done in the future. (<a href="#fn1_b">back</a>)</P>
+<P><A name=FN2><strong>Footnote 2</strong></A>:<BR><EM>Communications of the ACM</EM>, July, 
+1970, page 415ff (<a href="#fn2_b">back</a>)</P>
+<P><A name=FN3><strong>Footnote 3</strong></A>:<BR>Under the name ``TILT'' (``Texas Instruments 
+Language Translator''), it was used on various TI computers during the 70s and 
+80s. (<a href="#fn3_b">back</a>)</P>
+<P><A name=FN4><strong>Footnote 4</strong></A>:<BR><TT>mundie</TT><TT></TT><TT>@telerama.lm.com</TT>
+ (<a href="#fn4_b">back</a>)</P>
+
+</td>
+    <td width="2">&nbsp;</td>
+    <td width="150" align="center" valign="top" class="tl"><img src="side.png" width="137" height="447" border="0" usemap="#Map"></td>
+  </tr>
+  <!--
+  <tr><td  align="right" colspan="3" class="ssm"><font color="#CCCCCC" size="-1">Webdesign by Remo Dentato</font></td></tr>
+  -->
+</table>
+<map name="Map">
+  <area shape="rect" coords="7,32,132,69" href="http://sourceforge.net/projects/gema/" target="_blank">
+  <area shape="rect" coords="36,141,107,200" href="http://opensource.org/docs/definition.php">
+  <area shape="rect" coords="38,278,107,344" href="http://www.lua.org" target="_blank">
+  <area shape="rect" coords="48,407,95,442" href="links.html">
+</map>
+</body>
+</html>
+

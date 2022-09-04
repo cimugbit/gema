@@ -1,0 +1,417 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<title>Gema - Documentation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.b16 {
+	font-size: 16pt;
+	font-weight: bold;
+}
+
+.a0 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: none;
+	color: #333366;
+}
+
+.a1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: underline;
+	color: #990000;
+}
+-->
+</style>
+<script language="JavaScript">
+var s="<a href=\""
+var r="mail"
+function a(w,x,y)
+{ t=y+"@"+x+"."+w;  document.write(s+r+"to:"+t+"\">")}  
+</script>
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="1">
+  <tr> 
+    <td width="240" height="62" valign="top" background="topbkg1.gif"><img src="logo2.jpg" width="265" height="52"></td>
+    <td width="45" background="topbkg2.gif">&nbsp;</td>
+    <td align="center" valign="middle" background="topbkg3.gif"><font size=-1>&nbsp;<br>
+      </font> | <a href="index.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">About</a> 
+      | <a href="dnld.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Downloads</a> 
+      | <a href="docs.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Documents</a> 
+      | <a href="links.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Links</a> 
+      |</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top" class="tr"> <br> 
+      <H1 align=center>Building Gema</H1>
+      <div align="center">| <a href="#in">Introduction</a> | <a href="#bw">Building 
+        on Unix</a> | <a href="#bw">Building on Windows</a> | </div>
+      <h2><a name="in"></a>1. Introduction</h2>
+      <p><tt>&nbsp;</tt>This document describes how to build and install gema 
+        tools both on Unix and Windows platforms. It should be enough to follow 
+        the instruction in the sections below to have everything up and running.</p>
+      <p>&nbsp;&nbsp; If something goes wrong, and details included here (and 
+        in the scripts) would not be enough to help you to fix your problem, please 
+        report the problem using SourceForge <a href="http://sourceforge.net/tracker/?func=add&group_id=93530&atid=604614">bug 
+        tracking subsystem</a> (you <strong>don't</strong> need to log in as a 
+        SourceForge user) or sending an e-mail to 
+        <script>a("net","users.sourceforge","rdentato")</script>
+        Remo Dentato</a>. </p>
+      <h2><a name="bu"></a>2. Building on a Unix platform</h2>
+      <p> Gema has been built and tested on many Unix platforms. The following 
+        table summarize the ones we are aware of. Please let us know if you experienced 
+        other platforms.</p>
+      <table width="75%" border="0" align="center" cellpadding="1" cellspacing="0">
+        <tr align="center" valign="middle" bgcolor="#000099"> 
+          <td width="15%"><strong><font color="#FFFFFF" size="-1">OS</font></strong></td>
+          <td width="10%"><strong><font color="#FFFFFF" size="-1">Vers.</font></strong></td>
+          <td width="22%"><strong><font color="#FFFFFF" size="-1">Architecture</font></strong></td>
+          <td width="33%"><strong><font color="#FFFFFF" size="-1">Distribution</font></strong></td>
+          <td width="20%"><strong><font color="#FFFFFF" size="-1">Compiler</font></strong></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">Linux</font></td>
+          <td class="ttul"><font size="-1">2.4</font></td>
+          <td class="ttul"><font size="-1">x86</font></td>
+          <td class="ttul"><font size="-1">Debian 2.2</font></td>
+          <td class="ttul"><font size="-1">gcc 3.2.2</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">Linux</font></td>
+          <td class="ttul"><font size="-1">2.4</font></td>
+          <td class="ttul"><font size="-1"> x86</font></td>
+          <td class="ttul"><font size="-1">Redhat 9.0</font></td>
+          <td class="ttul"><font size="-1">gcc 3.2.2</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">Linux</font></td>
+          <td class="ttul"><font size="-1">2.4</font></td>
+          <td class="ttul"><font size="-1"> x86</font></td>
+          <td class="ttul"><font size="-1">Mandrake 9.0</font></td>
+          <td class="ttul"><font size="-1">gcc 3.2.2</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">Linux</font></td>
+          <td class="ttul"><font size="-1">2.4</font></td>
+          <td class="ttul"><font size="-1"> AMD64 <font color="#990000">(*)</font></font></td>
+          <td class="ttul"><font size="-1">Suse 8 ES</font></td>
+          <td class="ttul"><font size="-1">gcc 3.2.2</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">Linux</font></td>
+          <td class="ttul"><font size="-1"> 2.4</font></td>
+          <td class="ttul"><font size="-1"> Alpha</font></td>
+          <td class="ttul"><font size="-1">Debian 3.0</font></td>
+          <td class="ttul"><font size="-1">gcc 2.95.4</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">FreeBSD</font></td>
+          <td class="ttul"><font size="-1">4.8</font></td>
+          <td class="ttul"><font size="-1">x86</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">gcc 2.95.4</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">NetBSD</font></td>
+          <td class="ttul"><font size="-1">1.6.1</font></td>
+          <td class="ttul"><font size="-1">x86</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">gcc 2.95.3 </font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">Solaris</font></td>
+          <td class="ttul"><font size="-1">9</font></td>
+          <td class="ttul"><font size="-1">R220</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">gcc 3.2.2</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">MacOS X</font></td>
+          <td class="ttul"><font size="-1">10.1</font></td>
+          <td class="ttul"><font size="-1">PC-G4</font></td>
+          <td class="ttul"><font size="-1">SERVER Edition</font></td>
+          <td class="ttul"><font size="-1">gcc 2.95.2 </font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">MacOS X</font></td>
+          <td class="ttul"><font size="-1">10.2</font></td>
+          <td class="ttul"><font size="-1">PC-G4</font></td>
+          <td class="ttul"><font size="-1">SERVER Edition</font></td>
+          <td class="ttul"><font size="-1">gcc 2.95.2 </font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">IRIX</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">AIX</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">cc</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">HP-UX</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">cc</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">OSF1</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">SunOs</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">acc</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">mingw+msys</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">x86</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">gcc 3.2</font></td>
+        </tr>
+      </table>
+      <div align="center"><font color="#990000" size="-1">(*) On AMD64 a bug has 
+        been reported that affects the usage of <code>gel.getvar()</code> and 
+        <code>gel.setvar()</code>. </font></div>
+      <h3> &nbsp;&nbsp;2.1 The building process</h3>
+      <p> &nbsp;&nbsp;Assuming that your working directory is <code>~/works/gema</code>, 
+        you start the building process with:</p>
+      <table width="75%" border="1" align="center" cellpadding="3" cellspacing="0">
+        <tr> 
+          <td bgcolor="#FFFFCC"><code>~/works/gema> cd src<br>
+            ~/works/gema/src> ./gbuild </code></td>
+        </tr>
+      </table>
+      <p> &nbsp;&nbsp;The <code>gbuild</code> script, when executed with no argument, 
+        configures the environment appropriately for your system, then compiles 
+        <code>gema</code> and tries to compile <code>gel</code> and <code>gua</code> 
+        if it finds the Lua libraries.</p>
+      <p> .&nbsp;Upon a successful compilation, the testsuite is launched to verify 
+        that everything went well.</p>
+      <p>&nbsp;&nbsp;Ad hoc configurations may be made at the beginning of the 
+        <code>gbuild </code>script. For example, the path to Lua libraries and 
+        includes should be set here.</p>
+      <p> &nbsp;&nbsp;Other options for <code>gbuild </code>are:</p>
+      <dl>
+        <dl>
+          <dt><code>config</code></dt>
+          <dd> Performs the configuration step only. If this step does not work 
+            for your system you can set up all the variables in the <code>gbuild</code> 
+            script and set the <code>NOAUTO</code> variable to 1.<br>
+            &nbsp; </dd>
+          <dt> <code>install</code></dt>
+          <dd> Copy the executables and libraries to the direcotry specified by 
+            the <code>INSTALLDIR</code> variable.<br>
+            &nbsp; </dd>
+          <dt> <code>clean</code></dt>
+          <dd> Clean up directories removing temporary files generated during 
+            the building process. <br>
+            &nbsp; </dd>
+          <dt><code>all</code></dt>
+          <dd> Configure, compile and execute tests (equivalent to specifying 
+            no option at all). <br>
+            &nbsp; </dd>
+          <dt><code>gema</code></dt>
+          <dd> Only builds <code>gema</code>.</dd>
+          <dt>&nbsp;</dt>
+          <dt><code>gel</code></dt>
+          <dd> Only builds <code>gel</code>.<br>
+            &nbsp; </dd>
+          <dt><code>gua</code></dt>
+          <dd> Only builds <code>gua</code>.</dd>
+          <dt>&nbsp;</dt>
+          <dt><code>test</code></dt>
+          <dd> Executes the testsuites. </dd>
+        </dl>
+      </dl>
+      <p>&nbsp;</p>
+      <h3> &nbsp;&nbsp;2.2 Building Lua</h3>
+      <p> &nbsp;&nbsp;To have <code>gel</code> and <code>gua</code> compiled, 
+        you need Lua libraries already installed on your system.</p>
+      <p>&nbsp;&nbsp;If you don't have it, it's very easy to get it work. Just 
+        download the latest distribution from <a href="http://www.lua.org">http://www.lua.org</a>, 
+        and follow the provided instructions.</p>
+      <p> &nbsp;&nbsp;Do not forget to modify the values of <code>LUAINCPATH</code> 
+        and <code>LUALIBPATH</code> in the <code>gbuild</code> script to make 
+        them point to the right directories. </p>
+      <h2><a name="bw"></a>3. Building on a MS Windows platform</h2>
+      <p>&nbsp;&nbsp;Various combinations of compilers and Windows versions have 
+        been tested:</p>
+      <table width="58%" border="0" align="center" cellpadding="1" cellspacing="0">
+        <tr align="center" valign="middle" bgcolor="#000099"> 
+          <td width="45%"><strong><font color="#FFFFFF" size="-1">Compiler</font></strong></td>
+          <td width="15%"><strong><font color="#FFFFFF" size="-1">vers</font></strong></td>
+          <td width="12%"><strong><font color="#FFFFFF" size="-1">WinXP</font></strong></td>
+          <td width="12%"><strong><font color="#FFFFFF" size="-1">Win2K</font></strong></td>
+          <td width="12%"><strong><font color="#FFFFFF" size="-1">Win98</font></strong></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1"><a href="http://www.mingw.org" target="_blank">mingw+msys+gcc 
+            3.2</a></font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">X</font></td>
+          <td class="ttul"><font size="-1">X</font></td>
+          <td class="ttul"><font size="-1">X</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1"><a href="http://www.borland.com" target="_blank">Borland 
+            C++</a></font></td>
+          <td class="ttul"><font size="-1">5.5</font></td>
+          <td class="ttul"><font size="-1">X</font></td>
+          <td class="ttul"><font size="-1">X</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">Borland C++</font></td>
+          <td class="ttul"><font size="-1">5.6</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">X</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1">Microsoft Visual C++ </font></td>
+          <td class="ttul"><font size="-1">6.0</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">X</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1"><a href="http://www.cs.virginia.edu/%7Elcc-win32/" target="_blank">lcc-win32</a> 
+            </font></td>
+          <td class="ttul"><font size="-1">3.6</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">X</font></td>
+          <td class="ttul"><font size="-1">X</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1"><a href="http://www.cs.virginia.edu/%7Elcc-win32/" target="_blank">lcc-win32</a></font></td>
+          <td class="ttul"><font size="-1">3.8</font></td>
+          <td class="ttul"><font size="-1">X</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1"><a href="http://www.digitalmars.com/" target="_blank">Digital 
+            Mars C++</a></font></td>
+          <td class="ttul"><font size="-1">8.38.n</font></td>
+          <td class="ttul"><font size="-1">X</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+        </tr>
+        <tr align="center" valign="middle"> 
+          <td class="ttul"><font size="-1"><a href="http://www.openwatcom.org/" target="_blank">Open 
+            Watcom</a></font></td>
+          <td class="ttul"><font size="-1">1.2</font></td>
+          <td class="ttul"><font size="-1">X</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+          <td class="ttul"><font size="-1">&nbsp;</font></td>
+        </tr>
+      </table>
+      <p> &nbsp;&nbsp;The build process has not been tested on WinNT nor WinME 
+        but it is likely to work. Changing the scripts so to use a different compiler 
+        should not be too difficult.</p>
+      <h3>&nbsp;&nbsp;3.1 The building process</h3>
+      <p>&nbsp;&nbsp;&nbsp;If you use <code>mingw</code> and <code>msys</code> 
+        please refer to the section 2.1 since the process is exactly the same 
+        as the one for Unix systems. The only difference is that the options <code>gema</code>, 
+        <code>gel</code> and <code>gua</code> become <code>gema.exe</code>, <code>gel.exe</code> 
+        and <code>gua.exe</code>.</p>
+      <p>&nbsp;&nbsp;&nbsp;For the other tested compilers, the only prerequisite 
+        is that your compiler is properly set and can be invoked from the command 
+        line prompt. For example, if you use Microsoft VC, the <code>vcvars32.bat</code> 
+        should have been launched beforehand.</p>
+      <p>&nbsp;&nbsp;Also be sure to have enough &quot;environment memory&quot; 
+        in your console, all tests have been performed with at least 4096K available. 
+      </p>
+      <p>&nbsp;Assuming the environment has been set properly and that your working 
+        directory is <code>D:\works\gema</code>, you start the building process 
+        with:</p>
+      <table width="75%" border="1" align="center" cellpadding="3" cellspacing="0">
+        <tr> 
+          <td bgcolor="#FFFFCC"><code>D:\works\gema> cd src <br>
+            D:\works\gema\src> gbuild</code></td>
+        </tr>
+      </table>
+      <p> &nbsp;&nbsp;Everything will be rebuilt, and the tests will be executed. 
+        After that, copy the exe files in a directory that is in your path. </p>
+      <p> &nbsp;&nbsp;To have the Lua bindings (<code>libgel.lib</code>, <code>gel.exe</code> 
+        and <code>gua.exe</code>) compiled, you need to specify where the Lua 
+        libraries and includes are, setting the <code>LUALIBPATH</code> and <code>LUAINCPATH</code> 
+        appropriately.</p>
+      <p>&nbsp; If the building scripts are unable to find them, they make an 
+        attempt to guess their location. If this step also fail, the Lua bindings 
+        won't be built. See next section for some more detail.</p>
+      <p>&nbsp;&nbsp;Options for <code>gbuild.bat</code> may be shown at the command 
+        line using <code>gbuild /?</code></p>
+          <table width="85%" border="1" align="center" cellpadding="3" cellspacing="0">
+            <tr> 
+              
+          <td bgcolor="#FFFFCC"><code> <font size="-1">Usage:<br>
+            &nbsp;gbuild [all] Build gema, gel and gua. Perform tests at the end.<br>
+            &nbsp;gbuild gema Build only gema.<br>
+            &nbsp;gbuild lua Recompile also lua libraries (if source found).<br>
+            &nbsp;gbuild config Only do the configuration step.<br>
+            &nbsp;gbuild clean Delete all the temporary files.<br>
+            &nbsp;gbuild test Only perform testsuite<br>
+            &nbsp;gbuild -test Do not perform testsuite<br>
+            &nbsp;gbuild install Copy gema, gel and gua into &quot;C:\WINDOWS&quot;.<br>
+            &nbsp;gbuild uninstall Delete gema, gel and gua from &quot;C:\WINDOWS&quot;.</font></code></td>
+            </tr>
+          </table>
+      <h3> &nbsp;&nbsp;3.2 Building Lua</h3>
+      <p> &nbsp;&nbsp;The <code>gbuild</code> script assumes that the lua static 
+        libraries are named <code>liblua.lib</code> and <code>liblualib.lib</code>. 
+        If the Makefile that comes with Lua does not work for you, you can use 
+        the following command:</p>
+      <table width="75%" border="1" align="center" cellpadding="3" cellspacing="0">
+        <tr> 
+          <td bgcolor="#FFFFCC"><code> D:\works\gema\src> gbuild lua</code></td>
+        </tr>
+      </table>
+      <p>the <code>lbuild.bat</code> script will do all that is required for building 
+        Lua following the same logic as the Unix shell script <code>build</code> 
+        that comes with the Lua distribution.</p>
+      <p> &nbsp;&nbsp;To make it work, you have to specify the directory where 
+        you uncompressed the Lua tarball (for example <code>d:\works\Lua-5.0.2</code>) 
+        in the <code>LUAHOME</code> variable inside the <code>gbuild.bat</code> 
+        script.</p>
+      <p> &nbsp;&nbsp;Note that the process may not work if Lua souce files are 
+        on a different volume than the gema source file, the easiest option is 
+        to have the gema sourcetree and the Lua sourcetree under the same directory 
+        (in our examples <code>d:\works</code>).</p>
+      <pre>&nbsp;</pre>
+      </td>
+    <td width="2">&nbsp;</td>
+    <td width="150" align="center" valign="top" class="tl"><img src="side.png" width="137" height="447" border="0" usemap="#Map"></td>
+  </tr>
+  <!--
+  <tr><td  align="right" colspan="3" class="ssm"><font color="#CCCCCC" size="-1">Webdesign by Remo Dentato</font></td></tr>
+  -->
+</table>
+<map name="Map">
+  <area shape="rect" coords="7,32,132,69" href="http://sourceforge.net/projects/gema/" target="_blank">
+  <area shape="rect" coords="36,141,107,200" href="http://opensource.org/docs/definition.php">
+  <area shape="rect" coords="38,278,107,344" href="http://www.lua.org" target="_blank">
+  <area shape="rect" coords="48,407,95,442" href="links.html">
+</map>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Gema</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.b16 {
+	font-size: 16pt;
+	font-weight: bold;
+}
+
+.a0 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: none;
+	color: #333366;
+}
+
+.a1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: underline;
+	color: #990000;
+}
+-->
+</style>
+<script language="JavaScript">
+var s="<a href=\""
+var r="mail"
+function a(w,x,y)
+{ t=y+"@"+x+"."+w;  document.write(s+r+"to:"+t+"\">")}  
+</script>
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="1">
+  <tr> 
+    <td width="240" height="62" valign="top" background="topbkg1.gif"><img src="logo2.jpg" width="265" height="52"></td>
+    <td width="45" background="topbkg2.gif">&nbsp;</td>
+    <td align="center" valign="middle" background="topbkg3.gif"><font size=-1>&nbsp;<br>
+      </font> | <a href="index.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">About</a> 
+      | <a href="dnld.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Downloads</a> 
+      | <a href="docs.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Documents</a> 
+      | <a href="links.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Links</a> 
+      |</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top" class="tr">
+     <br>
+<H2><A name="3Ntt">3</A> Notation&nbsp;&nbsp;
+ <a href="gema_ref.html#2OprtOvrv" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#3.1Spcchrc" class="ssm"><font size="-1">next</font></a></H2>
+<P>In the documentation, quotation marks are often used to visually delimit 
+examples that are embedded in the text. The quotation marks are never part of 
+the example. 
+<P>
+<H3><A name="3.1Spcchrc">3.1</A> Special characters&nbsp;&nbsp;
+ <a href="#3Ntt" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#3.2EscpSqun" class="ssm"><font size="-1">next</font></a></H3>
+By default, the following 
+characters have special meaning in patterns. Note that all of these can be 
+changed through the use of the <TT>@set-syntax</TT> function. See also the 
+<TT>-literal</TT> option. 
+<P>
+<DL>
+  <DT><TT>*</TT>
+  <DD>In a template, this denotes a wild-card argument that matches any number 
+  of characters, from zero up to a maximum of 4096, or as specified by the 
+  <TT>-arglen</TT> option. (Some limit is needed for efficiency to avoid reading 
+  all the way to the end of the file before concluding that the match has 
+  failed.) Characters are copied from the input stream into the argument value 
+  until a match is found for the entire remainder of the template. Thus, when a 
+  template has two or more wild card arguments, the input text is divided among 
+  them as necessary for the complete template to be matched. (By contrast, a 
+  ``<TT>&lt;u&gt;</TT>'' argument is similar except that it terminates when a 
+  match is found for whatever sequence of literal characters follows it, up 
+  until the next argument.) If the <TT>-line</TT> option is in effect or if 
+  ``<TT>\L</TT>'' appeared earlier in the template, then it will not accept a 
+  newline character. 
+  <P>In an action, it denotes the value of the corresponding template argument. 
+  </P>
+  <DT><TT>?</TT>
+  <DD>Wild-card argument that matches any one character. If the <TT>-line</TT> 
+  option is in effect or if ``<TT>\L</TT>'' appeared earlier in the template, 
+  then it will not accept a newline character. 
+  <DT><TT>#</TT>
+  <DD>Recursive argument. In a template, this denotes an argument whose value is 
+  obtained by translating the input text in the same domain as the current rule 
+  until a match is found for whatever sequence of literal characters follows the 
+  argument (up to the next argument, or the end of the template, or 
+  ``<TT>\G</TT>''). 
+  <P>In an action, it denotes the value of the corresponding template argument. 
+  </P>
+  <DT><TT>&lt;</TT><I>name</I><TT>&gt;</TT>
+  <DD>Recursive argument, translated according the named domain, or a 
+  pre-defined recognizer argument. The name may be empty to denote the default 
+  domain. The name does not have to have been defined before it is referenced. 
+  This can be used only in a template. 
+  <DT><TT>/</TT><I>regexp</I><TT>/</TT>
+  <DD>In a template, this denotes an argument where the characters between the 
+  slashes are used as a regular expression, and the argument value is however 
+  much text it matches. Regular expressions have been documented many other 
+  places, so will not be detailed here. Suffice it to say that the following 
+  characters and combinations have special meaning:<BR><TT>. \ [ ] * + ^ $ \( \) 
+  \&lt; \&gt;</TT> <BR>A slash that is to be part of the regular expression 
+  needs to be preceded by a backslash. Regular expression arguments never cross 
+  line boundaries. Unlike other kinds of arguments, they will match as many 
+  characters as they can, without regard to whatever follows in the template. 
+  For example, the template ``<TT>a/[a-z]*/x</TT>'' will never match anything 
+  because if there is an ending ``<TT>x</TT>'', it will be swallowed by the 
+  argument; however, in the template ``<TT>a&lt;l&gt;x</TT>'' the argument will 
+  match on any letter except ``<TT>x</TT>''. 
+  <DT><TT>=</TT>
+  <DD>This designates the end of a template and the beginning of the 
+  corresponding action. 
+  <DT><TT>$0</TT>
+  <DD>This can be used in an action to copy the matched text to the output. The 
+  template is evaluated as though it were an action, with each argument 
+  designator being replaced by the actual argument value. Note that this does 
+  not necessarily exactly duplicate the input text since any ignored whitespace 
+  will be lost and recursive arguments are shown in their translated form. 
+  <DT><TT>$</TT><I>digit</I> or <TT>${</TT><I>digits</I><TT>}</TT>
+  <DD>In either a template or action, this represents the value of the numbered 
+  argument. The argument number must be enclosed in braces if it needs more than 
+  one digit. In a template, this obviously can only refer to a preceding 
+  argument, and in the current implementation, the value of a ``<TT>*</TT>'' 
+  argument cannot be accessed within the same template. 
+  <DT><TT>$</TT><I>letter</I>
+  <DD>In either a template or action, this inserts the value of a variable, 
+  which is limited to having a name which is a single letter. An error is 
+  reported if the variable is not defined. 
+  <DT><TT>${</TT><I>name</I><TT>}</TT>
+  <DD>In an action, this outputs the value of variable. The name is limited to 
+  not begin with a digit. An error is reported if the variable is not defined. 
+  <DT><TT>${</TT><I>name</I><TT>;</TT><I>default</I><TT>}</TT>
+  <DD>In an action, this outputs the value of the named variable, if it is 
+  defined, or evaluates the default action if the variable is not defined. 
+  <DT><TT>\ </TT>
+  <DD>Escape character; see the section on ``escape sequences'' below. 
+  <DT><TT>^</TT>
+  <DD>Control key. Together with the following character, this represents the 
+  control character formed by combining the Control key with the character. For 
+  example, either ``<TT>^J</TT>'' or ``<TT>^j</TT>'' could be used to denote the 
+  ASCII Line Feed character. This notation is not meaningful if a character set 
+  other than ASCII is being used. 
+  <DT>Space
+  <DD>In a template, a space character matches one or more whitespace characters 
+  in the input, the same as ``<TT>\S</TT>''. (In the less likely event that you 
+  really want to match exactly one space character, you can use ``<TT>\ </TT>'' 
+  or ``<TT>\s</TT>''.) In an action, a space character causes one space to be 
+  output if the last character output was not a whitespace character, except 
+  that if there are multiple adjacent spaces, all but the first are taken 
+  literally. However, if the <TT>-w</TT> option is used, then spaces are ignored 
+  except where they server to separate two identifiers. 
+  <DT>NewLine
+  <DD>The end of a line denotes the end of a rule or immediate action. 
+  <DT><TT>;</TT>
+  <DD>The semicolon is used to separate multiple rules on the same line, and to 
+  separate arguments of function calls. 
+  <DT><TT>@</TT><I>name</I><TT>{</TT><I>args</I><TT>}</TT>
+  <DD>In an action, this notation is used to either call a built-in function or 
+  to translate the argument using the rules of the named domain. The name may be 
+  empty to denote the default domain. It is permissible to reference a domain 
+  name that is defined later in the file. The braces may be optionally omitted 
+  for functions that take no arguments. 
+  <DT><TT>@</TT><I>spchar</I>
+  <DD>When followed by a special character (i.e. not a letter or digit), the 
+  ``<TT>@</TT>'' indicates that the following character has its default meaning, 
+  as documented in this list. This can be used to access the original 
+  functionality of a character that has been changed by the <TT>-literal</TT> 
+  option or <TT>@set-syntax</TT> function. For example, if you had done 
+  ``<TT>-literal /</TT>'' and then discovered that you do need to use a regular 
+  expression, you could write it as ``<TT>@/</TT><I>regexp</I><TT>@/</TT>''. 
+  <DT><TT>:</TT>
+  <DD>The characters to the left of the colon (with any leading and trailing 
+  spaces and surrounding angle brackets removed) constitute the name of the 
+  domain in which the rules that follow on the same line will be defined. 
+  <DT><TT>::</TT>
+  <DD>A double colon specifies that the domain whose name appears to the left, 
+  inherits from the domain whose name appears to the right. 
+  <DT><TT>!</TT>
+  <DD>Comment - the rest of the line is ignored. This can either appear at the 
+  beginning of a line to cause the whole line to be ignored, or it can be used 
+  at the end of a rule so that the remainder of the line is a comment. </DD></DL>
+<p align="right"> <a href="#3.1Spcchrc" classe="ssm">up</a>&nbsp;</p>
+
+<H3><A name="3.2EscpSqun">3.2</A> Escape Sequences&nbsp;&nbsp;
+ <a href="#3.1Spcchrc" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#3.3Rcgnrgumn" class="ssm"><font size="-1">next</font></a></H3>
+ The backslash character 
+denotes special handling for the character that follows it. 
+<UL>
+  <LI>When followed by a lower-case letter or a digit, it represents a 
+  particular control character. 
+  <LI>When followed by an upper-case letter, it is a pattern match operator. 
+  <LI>A backslash at the end of a line designates continuation by causing the 
+  newline to be ignored along with any leading white space on the following 
+  line. 
+  <LI>Before any other character, the backslash quotes the character so that it 
+  simply represents itself. In particular, a literal backslash is represented by 
+  two backslashes. </LI></UL>
+<P>Following are the defined escape sequences: 
+<P>
+<DL>
+  <DT><TT>\a</TT>
+  <DD>Alert (a.k.a. bell) character 
+  <DT><TT>\b</TT>
+  <DD>Backspace character 
+  <DT><TT>\c</TT><I>x</I>
+  <DD>Control key combined with the following character. For example, 
+  ``<TT>\ci</TT>'', ``<TT>\cI</TT>'', ``<TT>^i</TT>'', ``<TT>^I</TT>'', and 
+  ``<TT>\t</TT>'' all have the same effect, namely to represent the ASCII Tab 
+  character. 
+  <DT><TT>\d</TT>
+  <DD>Delete character 
+  <DT><TT>\e</TT>
+  <DD>Escape character (i.e. ESC, not backslash) 
+  <DT><TT>\f</TT>
+  <DD>Form feed character 
+  <DT><TT>\n</TT>
+  <DD>New line character 
+  <DT><TT>\r</TT>
+  <DD>carriage Return character 
+  <DT><TT>\s</TT>
+  <DD>Space character 
+  <DT><TT>\t</TT>
+  <DD>horizontal Tab character 
+  <DT><TT>\v</TT>
+  <DD>Vertical tab character 
+  <DT><TT>\x</TT><I>xx</I>
+  <DD>character specified by its heXadecimal code 
+  <DT><TT>\</TT><I>digits</I>
+  <DD>character specified by its octal code 
+  <P></P>
+  <DT><TT>\A</TT>
+  <DD>Matches the beginning of the input data, either the beginning of a file or 
+  the beginning of the argument for a domain used as a function. 
+  <DT><TT>\B</TT>
+  <DD>Matches the beginning of file. This can be used either by itself to 
+  specify actions to be taken before beginning to read the file, or it can be 
+  used at the beginning of a template that is to match only on the first line of 
+  the file. 
+  <DT><TT>\C</TT>
+  <DD>This causes case-insensitive comparison for letters in the rest of the 
+  template. (See also the <TT>-i</TT> option which selects case-insensitive mode 
+  globally.) 
+  <DT><TT>\E</TT>
+  <DD>Matches the end of file. 
+  <DT><TT>\G</TT>
+  <DD>Goal point. This can be used in a template to indicate the end of the 
+  literal string that is used to recognize the end of the preceding argument. 
+  For example, if the template ``<TT>a(&lt;T&gt;) done</TT>'' is applied to the 
+  input data ``<TT>a(x) b(y) done</TT>'', the argument ``<TT>&lt;T&gt;</TT>'' 
+  will match on the text ``<TT>x) b(y</TT>'', which is probably not what was 
+  desired. If the template is written as ``<TT>a(&lt;T&gt;)\G done</TT>'' then 
+  the argument will be terminated by the first right parenthesis, and then the 
+  match will fail if the text following the parenthesis doesn't match ``<TT> 
+  done</TT>''. This does not yet work for ``<TT>*</TT>'' arguments. 
+  <P>If ``<TT>\G</TT>'' immediately follows a recursive argument, then there is 
+  no delimiter, and the argument will continue to accept characters until it 
+  stops itself by executing <TT>@end</TT> or <TT>@terminate</TT>. </P>
+  <DT><TT>\I</TT>
+  <DD>Identifier separator. In a template, this matches an empty string if it is 
+  not within an identifier. In other words, it requires either of the adjacent 
+  characters to not be an identifier constituent in order for the template to 
+  match. In an action, this outputs a space character if the last character 
+  output is an identifier constituent. By default, an identifier constituent is 
+  a letter, digit, or underscore, but this can be extended by the 
+  <TT>-idchars</TT> option. 
+  <DT><TT>\J</TT>
+  <DD>Join - locally counteracts the <TT>-w</TT> and/or <TT>-t</TT> option by 
+  saying that spaces in the input will not be ignored at this position, and an 
+  identifier delimiter is not required here. If neither of these options is 
+  being used, then it has no effect. Not meaningful in an action. 
+  <DT><TT>\L</TT>
+  <DD>Line mode - arguments that follow in the same template are not allowed to 
+  cross line boundaries. This also means that ``<TT>\S</TT>'' and 
+  ``<TT>\W</TT>'' will not accept newline characters. However, a line boundary 
+  can still be crossed by an explicit ``<TT>\n</TT>'' or ``<TT>\N</TT>''. 
+  <DT><TT>\N</TT>
+  <DD>New line boundary. In a template, this matches an empty string if it is at 
+  either the beginning of a line or the end of a line (either before or after a 
+  new line character, or at the beginning or end of the file or data stream). In 
+  an action, it outputs a new line character if the last character output is not 
+  a new line. 
+  <DT><TT>\P</TT>
+  <DD>Position - if the template matches, the input stream will be left at this 
+  position. Thus everything following this is a look-ahead, and will be re-read 
+  for subsequent pattern matches. 
+  <DT><TT>\S</TT>
+  <DD>Space. In a template, this matches one or more whitespace characters. (See 
+  also ``<TT>&lt;S&gt;</TT>'' which has the same effect except that the spaces 
+  are remembered as an argument value.) In an action, it outputs one space 
+  character if the last character output is not a whitespace character. 
+  <DT><TT>\W</TT>
+  <DD>Optional whitespace. In a template, this specifies that any whitespace 
+  characters in the input stream at this point will be skipped over. (See also 
+  ``<TT>&lt;s&gt;</TT>'' which has the same effect except that the spaces are 
+  remembered as an argument value.) However, if this is followed in the template 
+  by a literal whitespace character, then that character will not be skipped. 
+  For example, in ``<TT>\W\n</TT>'', the ``<TT>\W</TT>'' will skip any 
+  whitespace other than a newline. This has no effect in an action. See also the 
+  <TT>-w</TT> option which ignores spaces everywhere. 
+  <DT><TT>\X</TT>
+  <DD>Word separator. In a template, this matches an empty string if it is not 
+  within a word. In this context, a word consists of letters and digits. 
+  <DT><TT>\Z</TT>
+  <DD>Matches the end of the input data, either the end of a file or the end of 
+  the argument for a domain used as a function, or a look-ahead match of the 
+  terminating string for a recursive argument. </DD></DL>
+<p align="right"> <a href="#3.2EscpSqun" classe="ssm">up</a>&nbsp;</p>
+
+<H3><A name="3.3Rcgnrgumn">3.3</A> Recognizer arguments&nbsp;&nbsp;
+ <a href="#3.2EscpSqun" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="function.html#4BultFunct" class="ssm"><font size="-1">next</font></a></H3>
+ The following argument 
+designators, consisting of a single letter between angle brackets, can be used 
+in templates to match on various kinds of characters. Preceding the letter with 
+``<TT>-</TT>'' inverts the test. The argument requires at least one matching 
+character if the letter is uppercase, or is optional if the letter is lowercase. 
+The letter may be followed by a number to match on that many characters, or up 
+to that maximum for an optional argument. If the number is <TT>0</TT>, the 
+argument matches if the next character is of the indicated kind, but the input 
+stream is not advanced past it; in other words, this acts as a one-character 
+look-ahead. 
+<P>If the argument is followed in the template by literal characters, then the 
+argument will be terminated when that literal string is matched, even if those 
+characters would otherwise qualify for inclusion in the argument. 
+<P>
+<DL>
+  <DT><TT>&lt;A&gt;</TT>
+  <DD>Alphanumeric (letters and digits) 
+  <DT><TT>&lt;C&gt;</TT>
+  <DD>Control characters 
+  <DT><TT>&lt;D&gt;</TT>
+  <DD>Digits 
+  <DT><TT>&lt;F&gt;</TT>
+  <DD>File pathname. See the <TT>-filechars</TT> option. 
+  <DT><TT>&lt;G&gt;</TT>
+  <DD>Graphic characters, i.e. any non-space printable character 
+  <DT><TT>&lt;I&gt;</TT>
+  <DD>Identifier. By default, an identifier consists of letters, digits, and 
+  underscores. See the <TT>-idchars</TT> option. 
+  <DT><TT>&lt;J&gt;</TT>
+  <DD>lower case letters (in version 1.2 or later) 
+  <DT><TT>&lt;K&gt;</TT>
+  <DD>upper case letters (in version 1.2 or later) 
+  <DT><TT>&lt;L&gt;</TT>
+  <DD>Letters (either upper or lower case) 
+  <DT><TT>&lt;N&gt;</TT>
+  <DD>Number, i.e. digits with optional sign and decimal point 
+  <DT><TT>&lt;O&gt;</TT>
+  <DD>Octal digits 
+  <DT><TT>&lt;P&gt;</TT>
+  <DD>Printing characters, including space 
+  <DT><TT>&lt;S&gt;</TT>
+  <DD>white Space characters (space, tab, newline, FF, VT) 
+  <DT><TT>&lt;T&gt;</TT>
+  <DD>Text characters, including all printing characters and white space 
+  <DT><TT>&lt;U&gt;</TT>
+  <DD>Universal (matches anything except end-of-file) 
+  <DT><TT>&lt;W&gt;</TT>
+  <DD>Word (letters, apostrophe, and hyphen) 
+  <DT><TT>&lt;X&gt;</TT>
+  <DD>hexadecimal digits 
+  <DT><TT>&lt;Y&gt;</TT>
+  <DD>punctuation (graphic characters that are not identifiers) 
+</DD></DL>
+<p align="right"> <a href="#3.3Rcgnrgumn" classe="ssm">up</a>&nbsp;</p>
+<br>&nbsp;
+<hr>&nbsp;
+<a name="toc"></a>
+<H2>Table of Contents</H2>
+<A href="gema_ref.html#1Intrd">1 Introduction</A><BR>
+<A href="gema_ref.html#2OprtOvrv">2 Operational Overview</A><BR>
+<A href="notation.html#3Ntt">3 Notation<BR></A>
+&nbsp;&nbsp;<A href="notation.html#3.1Spcchrc">3.1 Special characters<BR></A>
+&nbsp;&nbsp;<A href="notation.html#3.2EscpSqun">3.2 Escape Sequences<BR></A>
+&nbsp;&nbsp;<A href="notation.html#3.3Rcgnrgumn">3.3 Recognizer arguments<BR></A>
+<A href="function.html#4BultFunct">4 Built-in Functions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.1Numbr">4.1 Numbers<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.2Strngfunct">4.2 String functions<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.1Outputfrmtpddn,flln,ndwrpp">4.2.1 Output formatting -- padding, filling, and wrapping<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.2StrngCmpr">4.2.2 String Comparison<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.3Cscnvr">4.2.3 Case conversion<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.4Msclstrngfunct">4.2.4 Miscellaneous string functions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.3Vrb">4.3 Variables<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.4Fls">4.4 Files<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.4.1Pthnmnpu">4.4.1 Pathname manipulation<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.4.2Usngltrnnputndutputfls">4.4.2 Using alternate input and output files<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.4.3Flcntxqur">4.4.3 File context queries<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.5Cntrflwfunct">4.5 Control flow functions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.6Othrprtsystmntrf">4.6 Other operating system interfaces<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.7Dfn">4.7 Definitions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.8SttnOptn">4.8 Setting Options<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.9Infrmfunct">4.9 Informational functions<BR>
+</A> <A href="function.html#4.10Lrltdfnctns"> </A> <A href="conclude.html#5Custmcmmnprcs">5 
+Customized command-line processing<BR>
+</A>
+<A href="conclude.html#6Extcds">6 Exit codes<BR></A>
+<A href="conclude.html#7SttusndFuturdvl">7 Status and Future development<BR></A>
+<A href="conclude.html#8Acknw">8 Acknowledgments</A> 
+<br>&nbsp;
+<hr>&nbsp;
+<br>&nbsp;
+</td>
+    <td width="2">&nbsp;</td>
+    <td width="150" align="center" valign="top" class="tl"><img src="side.png" width="137" height="447" border="0" usemap="#Map"></td>
+  </tr>
+  <!--
+  <tr><td  align="right" colspan="3" class="ssm"><font color="#CCCCCC" size="-1">Webdesign by Remo Dentato</font></td></tr>
+  -->
+</table>
+<map name="Map">
+  <area shape="rect" coords="7,32,132,69" href="http://sourceforge.net/projects/gema/" target="_blank">
+  <area shape="rect" coords="36,141,107,200" href="http://opensource.org/docs/definition.php">
+  <area shape="rect" coords="38,278,107,344" href="http://www.lua.org" target="_blank">
+  <area shape="rect" coords="48,407,95,442" href="links.html">
+</map>
+</body>
+</html>
+
+

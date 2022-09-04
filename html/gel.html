@@ -1,0 +1,558 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>GeL</title>
+<style type="text/css">
+<!--
+.ex {
+	font-size: 12px;
+	background-color: #CCCCCC;
+	color: #000000;
+}
+-->
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.b16 {
+	font-size: 16pt;
+	font-weight: bold;
+}
+
+.a0 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: none;
+	color: #333366;
+}
+
+.a1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: underline;
+	color: #990000;
+}
+-->
+</style>
+<script language="JavaScript">
+var s="<a href=\""
+var r="mail"
+function a(w,x,y)
+{ t=y+"@"+x+"."+w;  document.write(s+r+"to:"+t+"\">")}  
+</script>
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="1">
+  <tr> 
+    <td width="240" height="62" valign="top" background="topbkg1.gif"><img src="logo2.jpg" width="265" height="52"></td>
+    <td width="45" background="topbkg2.gif">&nbsp;</td>
+    <td align="center" valign="middle" background="topbkg3.gif"><font size=-1>&nbsp;<br>
+      </font> | <a href="index.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">About</a> 
+      | <a href="dnld.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Downloads</a> 
+      | <a href="docs.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Documents</a> 
+      | <a href="links.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Links</a> 
+      |</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top" class="tr"> <br> <H1 align="center"><A name="gel"></A> 
+        GeL: a Lua binding for Gema</H1>
+      <p align="center"> | <a href="#in">Introduction</a> | <a href="#us">Usage</a> 
+        | <a href="#fn">Functions</a> | <a href="#ex">Examples</a> | </p>
+      <h2><a name="in" id="in"></a>1. Introduction&nbsp;&nbsp; <a href="#gel" class="ssm"><font size="-1">top</font></a> 
+        <a href="#us" class="ssm"><font size="-1">next</font></a></h2>
+      <p><tt>&nbsp;gema</tt> actions are enough for everyday usage but occasionally 
+        you may need more power to define a complex transformation.</p>
+      <p>&nbsp;&nbsp;You might, also, want to use the superior matching capabilities 
+        of <tt>gema</tt> to drive your program.</p>
+      <p>&nbsp;&nbsp;GeL is a Lua 5 library that:</p>
+      <ul>
+        <li> allows the execution of Lua function (and hence of a C function) 
+          in a gema action</li>
+        <li> provides the powerful text matching mechanisms offered by gema as 
+          a set of Lua functions </li>
+      </ul>
+      <p> &nbsp;&nbsp;it has been tested with Lua 5.0.2.</p>
+      <p>&nbsp;&nbsp;Refer to the detailed <a href="build.html">documentation</a> 
+        to build gel togheter with gema, .</p>
+      <h3>&nbsp;&nbsp;<strong></strong><strong>1.1 Status</strong></h3>
+      <p>&nbsp;&nbsp;GeL is not as mature as gema or Lua, please report any bugs 
+        you may find using SourceForge <a href="http://sourceforge.net/tracker/?func=add&group_id=93530&atid=604614">bug 
+        tracking subsystem</a> (you <strong>don't</strong> need to log in as a 
+        SourceForge user) or sending an e-mail to <script>a("net","users.sourceforge","rdentato")</script>Remo Dentato</a>.
+		</p>
+      <h3>&nbsp;&nbsp;<strong>1.2 Licence</strong></h3>
+      <p>GeL is released under the same licence of Gema. No specific reference 
+        needs to be made to GeL as long as the due reference to Gema and Lua have 
+        been made.</p>
+      <H2><a name="us" id="us"></a>2. Usage&nbsp;&nbsp; <a href="#in" class="ssm"><font size="-1">prev</font></a> 
+        <a href="#gel" class="ssm"><font size="-1">top</font></a> <a href="#fn" class="ssm"><font size="-1">next</font></a></H2>
+      <h3><font size="-1" face="Courier New, Courier, mono"> </font>&nbsp;&nbsp;<strong>2.1 
+        Gema like</strong></h3>
+      <p>&nbsp;&nbsp;<tt>Gel</tt> may be used exactly as if it was <tt>gema</tt>, 
+        any valid <tt>gema</tt> script should work when executed by <tt>gel</tt>:</p>
+      <p><font size="-1" face="Courier New, Courier, mono">&nbsp;&nbsp;<strong>gel</strong> 
+        [<a href="http://smallbasic.sourceforge.net/index.php#download">gemaopts</a>] 
+        [<strong>-f</strong> rules.gema] [<strong>-l</strong> script.lua] [infile 
+        [outfile]]</font></p>
+      <p>. The only differences are:</p>
+      <ul>
+        <li>&nbsp;The <tt>@lua{}</tt> function is available to execute lua scripts 
+          in actions</li>
+        <li> &nbsp;Text enclosed between &quot;<tt>![</tt>&quot; and &quot;<tt>!]</tt>&quot; 
+          is considered lua code and is immediately executed</li>
+      </ul>
+      <p>&nbsp;&nbsp;Rules specfied with '<font face="Courier New, Courier, mono"><strong>-f</strong></font>' 
+        are loaded, the <tt>lua</tt> script specified with '<strong><font face="Courier New, Courier, mono">-l</font></strong>' 
+        is executed (possibily defining lua function to be used in some gema action) 
+        and the <font face="Courier New, Courier, mono">infile</font> is translated 
+        to the <font face="Courier New, Courier, mono">outfile</font> applying 
+        the rules defined in the default domain.</p>
+      <p>&nbsp;&nbsp;All the gema options are recognized.<br>
+      </p>
+      <h3>&nbsp;&nbsp;<strong>2.2 Lua like</strong></h3>
+      <p>&nbsp;&nbsp;Gel may be used as a Lua (non interactive) interpreter:</p>
+      <p><font size="-1" face="Courier New, Courier, mono">&nbsp;&nbsp;<strong>gel</strong> 
+        [<a href="gema_man.html#opt">gemaopts</a>] [<strong>-f</strong> rules.gema] 
+        <strong>-lua</strong> script.lua [args]</font></p>
+      <p><span>&nbsp;</span>&nbsp;Rules specfied with '<font face="Courier New, Courier, mono"><strong>-f</strong></font>' 
+        are loaded then the control is passed to the lua script specified with 
+        '<font face="Courier New, Courier, mono"><strong>-lua</strong></font>'. 
+        No input file is opened and it's a script responsability to begin the 
+        transformation process.</p>
+      <p> &nbsp;&nbsp;The optional arguments <font face="Courier New, Courier, mono">args</font> 
+        are passed to the script in the global table <font face="Courier New, Courier, mono">arg:</font> 
+      </p>
+      <ul>
+        <li> <font face="Courier New, Courier, mono">arg.n</font> will contain 
+          the number of arguments;</li>
+        <li><font face="Courier New, Courier, mono">arg[0]</font> will contain 
+          the name of the script;</li>
+        <li><font face="Courier New, Courier, mono">arg[x]</font> with <font face="Times New Roman, Times, serif">x</font> 
+          between <font face="Times New Roman, Times, serif">1</font> and <font face="Courier New, Courier, mono">arg.n</font>, 
+          the arguments. </li>
+      </ul>
+      <p>&nbsp;&nbsp;All the <tt>gema</tt> options are recognized.</p>
+      <h3><strong>&nbsp;&nbsp;2.3 Gua</strong></h3>
+      <p>&nbsp;&nbsp;<tt>Gua</tt> is a stand-alone Lua interpreter linked against 
+        the gel library.</p>
+      <p><font size="-1" face="Courier New, Courier, mono">&nbsp;&nbsp;<strong>gua</strong> 
+        [luaopts] [script.lua [args]]</font></p>
+      <p><span>&nbsp;</span>&nbsp;I added <font face="Courier New, Courier, mono">gua</font> 
+        to this distribution to show how easy is to embed gel functions in your 
+        lua enabled programs.</p>
+      <p> &nbsp;The only difference between <font face="Courier New, Courier, mono">gua.c</font> 
+        and the original <font face="Courier New, Courier, mono">lua.c</font> 
+        you can find in the Lua 5.0 distribution, is the addition of the function 
+        call <font face="Courier New, Courier, mono">gel_init(l)</font> at line 
+        386.<br>
+        <em><font size="-1"> Actually there is another difference that it's not 
+        related to gel, I had to add a fflush(stderr) to the l_message() function 
+        to fix a problem with the mingw compiler.</font></em></p>
+      <h3><strong>&nbsp;&nbsp;2.4 libgel</strong></h3>
+      <p>&nbsp;&nbsp;All the gel function are available as static library named 
+        <tt>libgel.a</tt> on Unix or <tt>libgel.lib</tt> on Windows. The building 
+        process will automatically generate it.<br>
+        <br>
+      </p>
+      <h2><a name="fn"></a><span><strong>3. Functions</strong></span> <a href="#us" class="ssm"><font size="-1">prev</font></a> 
+        <a href="#gel" class="ssm"><font size="-1">top</font></a> <a href="#ex" class="ssm"><font size="-1">next</font></a></H2>
+      <h3>&nbsp;&nbsp;<strong><a name="ge"></a>3.1 Gema</strong></h3>
+      <p>&nbsp;&nbsp;Some new functions havr been added to <font face="Courier New, Courier, mono">gema</font>:</p>
+      <dl>
+        <dt><tt>@lua{</tt><em>string</em><tt>}</tt></dt>
+        <dd> that executes <em>string</em> as a piece of <tt>lua</tt> code. Returns 
+          a value only if the lua code explicitly uses <tt>return</tt>:<br>
+          &nbsp; 
+          <ul>
+            <li><tt>@lua{f()}</tt> returns nothing</li>
+            <li><tt>@lua{return f()} </tt>returns the first value returned by 
+              <tt>f()</tt>.</li>
+          </ul>
+          &nbsp; </dd>
+        <dt><tt>@rules{</tt><em>group</em><tt>}</tt></dt>
+        <dd> Reports the status of the nth group of rules. Two new escape sequences 
+          ( <tt>\Q</tt> and <tt>\q</tt>) have been added to create groups of rules; 
+          up to 8 groups can be created numbered from 0 to7.<br>
+          To understand this new feature, imagine you want to use different rules 
+          to parse a block of text. A possible solution is to set a variable and 
+          then use @cmpn to have different behaviors with respect to the same 
+          match.<br>
+          Instead, using \Q in a pattern means that that a match should fail if 
+          the specified group is disabled.<br>
+          &nbsp;</dd>
+        <dt><tt>@rules{</tt><em>group;switch</em><tt>}</tt></dt>
+        <dd> Modify the status of the nth group:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>0</tt>: turn off<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>1</tt>: turn on<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>x</tt>: toggle<br>
+          &nbsp;</dd>
+        <dt><tt>@line{</tt><em>mark</em><tt>}</tt></dt>
+        <dd>the <tt>@line</tt> function has been extendend to support the <tt>\M</tt> 
+          escape sequence<br>
+          &nbsp;</dd>
+        <dt><tt>@column{</tt><em>mark</em><tt>}</tt></dt>
+        <dd> the <tt>@column</tt> function has been extendend to support the <tt>\M</tt> 
+          escape sequence<br>
+          &nbsp;</dd>
+      </dl>
+      <h3>&nbsp;&nbsp;<a name="lu"></a>3.2 Lua</h3>
+      <p>&nbsp;&nbsp;Lua functions can be loaded in three ways:</p>
+      <ul>
+        <li>using the <font face="Courier New, Courier, mono"><strong>-l</strong></font> 
+          option in the command line;</li>
+        <li>executing <font face="Courier New, Courier, mono"><strong>@lua{dofile(&quot;filename&quot;)}</strong></font> 
+          in an action;</li>
+        <li>embedding the lua code in the gema rule file between &quot;<font face="Courier New, Courier, mono"><strong>![</strong></font>&quot; 
+          and &quot;<font face="Courier New, Courier, mono"><strong>!]</strong></font>&quot;.</li>
+      </ul>
+      <p>&nbsp;&nbsp;&nbsp;The examples in the next section should clarify how 
+        to use those three methods.</p>
+      <p>&nbsp;&nbsp;&nbsp;There are new <font face="Courier New, Courier, mono">lua</font> 
+        functions to interact with gema environment:</p>
+      <dl>
+        <dt><tt>gel.set(</tt><i>varname</i><tt>,</tt><i>value</i><tt>)</tt> 
+        <dd><tt></tt> Set the value of varname (same as <tt>@set{}</tt>). <br>
+          &nbsp; </dd>
+        <dt><tt>gel.get(</tt><em>varname</em><tt>)</tt></dt>
+        <dd>Get the value of varname (same as <tt>@var{}</tt> in gema). Returns 
+          nil if the variable is unassigned.<br>
+          &nbsp; </dd>
+        <dt><tt>gel.push(</tt><em>varname</em><tt>,</tt><em>value</em><tt>)</tt></dt>
+        <dd>Use varname as a stack and push a value on top (same as <tt>@push{}</tt>in 
+          gema).<br>
+          &nbsp; </dd>
+        <dt><tt>gel.pop(</tt><em>varname</em><tt>)</tt></dt>
+        <dd>Use varname as a stack and pop the value on top (same as <tt>@pop{}</tt>in 
+          gema). It also returns the popped value.<br>
+          &nbsp; </dd>
+        <dt><tt>gel.write</tt>(<em>string</em><tt>)</tt></dt>
+        <dd>Write a string at the current position in the gema output (only works 
+          if executed in a function called by gema with <tt>@lua{}</tt>).<br>
+          &nbsp; </dd>
+        <dt><tt>gel.parsestring(</tt><em>string</em><tt>,</tt>[<em>domain</em><tt>,</tt>[<em>output</em>]]<tt>)</tt></dt>
+        <dd> Translate the string using the rules defined into the named domain 
+          and write the result to the output file. The output parameter can be 
+          the name of a file to be created, or nil meaning that the result should 
+          be returned as the value of the function.<br>
+          If output is &quot;-&quot; the translation will be written in the current 
+          gema output.<br>
+          If domain is &quot;&quot; or nil the default domain will be used.<br>
+          &nbsp; </dd>
+        <dt><tt>gel.parsefile(</tt><em>file</em><tt>,</tt>[<em>domain</em><tt>,</tt>[<em>output</em>]]<tt>)</tt></dt>
+        <dd> Same as gel.parsestring but the text to be translated is taken from 
+          the specified file.<br>
+          &nbsp; </dd>
+        <dt><tt>gel.parsestream(</tt><em>stream</em><tt>,</tt>[<em>domain</em><tt>,</tt>[<em>output</em>]]<tt>)</tt></dt>
+        <dd> Same as gel.parsestring but the text to be translated is taken from 
+          the specified stream.<br>
+          &nbsp;</dd>
+        <dt><tt>gel.streamfile(</tt><em>filename</em><tt>)</tt></dt>
+        <dd> Create, from the specified file, a stream to be used with gel.parsestream()<br>
+          &nbsp; </dd>
+        <dt><tt>gel.streamstring(</tt><em>string</em><tt>)</tt></dt>
+        <dd> Create, from the given string, a stream to be used with gel.parsestream()<br>
+          &nbsp; </dd>
+        <dt><tt>gel.streamclose(</tt><em>stream</em><tt>)</tt></dt>
+        <dd> Close the given stream.<br>
+          &nbsp; </dd>
+        <dt><tt>gel.streameof(</tt><em>stream</em><tt>)</tt></dt>
+        <dd> Check if there is some text left in the stream.<br>
+          &nbsp; </dd>
+        <dt><tt>gel.streamgetc(</tt><em>stream</em><tt>)</tt></dt>
+        <dd> Get next char from the stream.<br>
+          &nbsp; </dd>
+        <dt><tt>gel.streampeek(</tt><em>stream</em><tt>)</tt></dt>
+        <dd> Returns te next char from the stream without advancing the stream.<br>
+          &nbsp; </dd>
+        <dt><tt>gel.rulefile(</tt><em>file</em><tt>)</tt></dt>
+        <dd> Read new patterns from the specified file. In gema it would be <tt>@define{@read{</tt><em>file</em><tt>}}</tt><br>
+          &nbsp; </dd>
+        <dt><tt>gel.rulestring(</tt><em>string</em><tt>)</tt></dt>
+        <dd> Defines new patterns. Equivalent to <tt>@define{</tt><em>string</em><tt>}</tt>.<br>
+          &nbsp; </dd>
+        <dt><tt>gel.ruleclear(</tt><em>domain</em><tt>)</tt></dt>
+        <dd> Delete all patterns defined in the specified domain.<br>
+        </dd>
+      </dl>
+      <h2>&nbsp;&nbsp;<a name="ex"></a><span>4. Examples</span> <a href="#fn" class="ssm"><font size="-1">prev</font></a> 
+        <a href="#gel" class="ssm"><font size="-1">top</font></a> </h2>
+      <p>&nbsp;&nbsp;Here you will find some short examples on:</p>
+      <ul>
+        <li><a href="#3_1">Definining lua functions</a></li>
+        <li><a href="#3_2">Returning values from lua</a></li>
+        <li><a href="#3_3">Accessing gema variables</a></li>
+        <li><a href="#3_4">Parsing from Lua</a></li>
+      </ul>
+      <p> &nbsp;&nbsp;The best way to see GeL in action is to have a look at the 
+        example directory in the distribution package.</p>
+      <h3>&nbsp;&nbsp;&nbsp;<strong><a name="3_1" id="3_1"></a><span>4.1 Defining 
+        lua functions</span></strong></h3>
+      <p>&nbsp;&nbsp;There are three methods for having lua functions defined: 
+      <ol>
+        <li>Write the functions in a file and execute it through the command line 
+          <font face="Courier New, Courier, mono">-lua</font> option</li>
+        <li>Write the functions in a file and execute in an action through the 
+          <font face="Courier New, Courier, mono">@lua{}</font> function. This 
+          method also allows you to load a different set of lua functions depending 
+          on a match.</li>
+        <li>Embed the lua functions in the gema file using the new syntax &quot;<font face="Courier New, Courier, mono">![</font>&quot; 
+          &quot;<font face="Courier New, Courier, mono">!]</font>&quot; </li>
+      </ol>
+      <p> &nbsp;&nbsp;Here you will find the same task solved using the three 
+        methods.</p>
+      <p> &nbsp;&nbsp;Consider the following task as an example of a function 
+        not available in gema (it could have been any other function not easily 
+        definable in gema): </p>
+      <ul>
+        <li> Find numbers in a file and create another file with every number 
+          replaced by its logarithm (if <em>n</em> &gt; 0) or by the string &quot;-infty&quot; 
+          (if <em>n</em> &lt;= 0). </li>
+      </ul>
+      <p>&nbsp;&nbsp;Let's assume that the lua function is stored in the <font face="Courier New, Courier, mono">inflog.lua</font> 
+        file:</p>
+      <table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr> 
+          <td valign="top"><pre class="ex">
+function inflog(x)
+  if x&gt;0 then return math.log(x)
+  else return &quot;-infty&quot;
+  end
+end</pre></td>
+        </tr>
+      </table>
+      <p>&nbsp;&nbsp;You can write a file <font face="Courier New, Courier, mono">inflog.gma</font> 
+        as follows:</p>
+      <table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr> 
+          <td valign="top"><pre class="ex">&lt;N&gt;=@lua{return inflog($0)}</pre></td>
+        </tr>
+      </table>
+      <p>&nbsp;&nbsp;And execute it with (method 1):</p>
+      <table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr> 
+          <td valign="top"><pre class="ex">gel -lua inflog.lua -f inflog.gma dat1.dat dat2.dat</pre></td>
+        </tr>
+      </table>
+      <p>&nbsp;&nbsp;Or you could write inflog.gma as follows (method 2):</p>
+      <table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr> 
+          <td valign="top"><pre class="ex">@lua{dofile(&quot;inflog.lua&quot;)}
+&lt;N&gt;=@lua{return inflog($0)}</pre></td>
+        </tr>
+      </table>
+      <p>&nbsp;&nbsp;And execute it with:</p>
+      <table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr> 
+          <td valign="top"><pre class="ex">gel -f inflog.gma dat1.dat dat2.dat</pre></td>
+        </tr>
+      </table>
+      <p>&nbsp;&nbsp;Or you could forget <font face="Courier New, Courier, mono">inflog.lua</font>, 
+        write <font face="Courier New, Courier, mono">inflog.gel</font> as follows 
+        (method 3):</p>
+      <table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr> 
+          <td valign="top"><pre class="ex">![
+function inflog(x)
+  if x&gt;0 then return math.log(x)
+  else return &quot;-infty&quot;
+  end
+end
+!]
+
+&lt;N&gt;=@lua{return inflog($0)}</pre></td>
+        </tr>
+      </table>
+      <p>&nbsp;&nbsp;And execute it with:</p>
+      <table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr> 
+          <td valign="top"><pre class="ex">gel -f inflog.gel dat1.dat dat2.dat</pre></td>
+        </tr>
+      </table>
+      <p>&nbsp;&nbsp;Note that the file extensions are totaly unimportant.</p>
+      <h3>&nbsp;&nbsp;&nbsp;<strong><a name="3_2"></a><span>4.2 Returning values 
+        from lua</span></strong></h3>
+      <p>&nbsp;&nbsp;Normally return values of lua functions are discarded. You 
+        can have the first return value as result of the <font face="Courier New, Courier, mono">@lua{}</font> 
+        function using an explicit <font face="Courier New, Courier, mono">return</font> 
+        statement.</p>
+      <p>&nbsp;&nbsp;Another method is to use the <font face="Courier New, Courier, mono">gel.write</font> 
+        function.</p>
+      <p>&nbsp;&nbsp;To show how those two methods are used, let's consider the 
+        following task:</p>
+      <ul>
+        <li> Collect identifiers and sourround them with &quot;&lt;id&gt;&quot; 
+          and &quot;&lt;/id&gt;&quot; tags. If it's not the first time you encounter 
+          that identifers, add the attribute &quot;first&quot; to the id tag with 
+          the line where you first encountered it as value. At the end, write 
+          a sorted index of identifiers with the line where they first appear.</li>
+      </ul>
+      <p>and a possible solution where both <font face="Courier New, Courier, mono">return</font> 
+        and <font face="Courier New, Courier, mono">gel.write</font> are used:</p>
+      <table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr> 
+          <td valign="top"><pre class="ex">![
+id_ln={}; n_id={}; table.setn(n_id,0)
+ 
+function check_id(id,ln)
+  local t=""
+  if id_ln[id] then
+    t=" first=\""..id_ln[id].."\""
+  else
+    id_ln[id]=ln
+    table.insert(n_id,id)
+  end
+  return "&lt;id"..t.."&gt;"..id.."&lt;/id&gt;"
+end
+ 
+function sort_id()
+  table.sort(n_id)
+  gel.write("\n")
+  for n,id in pairs(n_id) do
+    gel.write(id.." "..id_ln[id].."\n")
+  end
+end
+!]
+
+&lt;I&gt;=@lua{return check_id("$0",@line)}
+\Z=@lua{sort_id()}</pre></td>
+        </tr>
+      </table>
+      <p>&nbsp;</p>
+      <h3>&nbsp;&nbsp;&nbsp;<strong><a name="3_3" id="3_3"></a><span>4.3 Accessing 
+        gema variables</span></strong></h3>
+      <p>&nbsp;&nbsp;Gema has separate functions to manipulate variables, command 
+        line switches and command line parameters. Gel provides a function to 
+        get a value from lua and a function to set it. If the given name starts 
+        with &quot;-&quot; it is considered a parameter or a switch (in that order).</p>
+      <p>&nbsp;&nbsp;The following table summarize the equivalence between Gel 
+        and Gema constructs.</p>
+      <table width="80%" border="1" align="center" cellpadding="2" cellspacing="0">
+        <tr align="center"> 
+          <td width="50%"><strong>Gel</strong></td>
+          <td width="50%"><strong>Gema</strong></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font size="-1" face="Courier New, Courier, mono">gel.get(&quot;n&quot;)</font></td>
+          <td width="50%"><font size="-1" face="Courier New, Courier, mono">@var{n}</font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font size="-1" face="Courier New, Courier, mono">gel.get(&quot;n&quot;)</font></td>
+          <td> <font size="-1" face="Courier New, Courier, mono">$n</font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font size="-1" face="Courier New, Courier, mono">gel.get(&quot;n&quot;) 
+            or 0 </font></td>
+          <td width="50%"><font size="-1" face="Courier New, Courier, mono">@var{n;0}</font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font size="-1" face="Courier New, Courier, mono">gel.get(&quot;n&quot;) 
+            or 0 </font></td>
+          <td><font size="-1" face="Courier New, Courier, mono">${n;0}</font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font size="-1" face="Courier New, Courier, mono">gel.get(&quot;@line&quot;)</font></td>
+          <td><font size="-1" face="Courier New, Courier, mono">@line</font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font size="-1" face="Courier New, Courier, mono">gel.get(&quot;@column&quot;)</font></td>
+          <td><font size="-1" face="Courier New, Courier, mono">@column</font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font color="#666666" size="-1" face="Courier New, Courier, mono">gel.get(&quot;-k&quot;)<em>*</em></font></td>
+          <td><font color="#666666" size="-1" face="Courier New, Courier, mono">@get-switch(k) 
+            </font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font color="#666666" size="-1" face="Courier New, Courier, mono">gel.get(&quot;-idchars&quot;)<em>*</em></font></td>
+          <td><font color="#666666" size="-1"><em>no equivalent</em></font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font size="-1" face="Courier New, Courier, mono">gel.set(&quot;n&quot;,5)</font></td>
+          <td><font size="-1" face="Courier New, Courier, mono">@set{n;5}</font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font color="#666666" size="-1" face="Courier New, Courier, mono">gel.set(&quot;-k&quot;,1)<em>*</em></font></td>
+          <td><font color="#666666" size="-1" face="Courier New, Courier, mono">@set-switch{k;1}</font></td>
+        </tr>
+        <tr valign="top"> 
+          <td height="25"><font color="#666666" size="-1" face="Courier New, Courier, mono">gel.set(&quot;-idchars&quot;,&quot;.&quot;)<em>*</em></font></td>
+          <td><font color="#666666" size="-1" face="Courier New, Courier, mono">@set-parm{idchars;.}</font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font size="-1" face="Courier New, Courier, mono">gel.push(&quot;n&quot;,9)</font></td>
+          <td><font size="-1" face="Courier New, Courier, mono">@bind{n;9}</font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font size="-1" face="Courier New, Courier, mono">gel.push(&quot;n&quot;,9)</font></td>
+          <td><font size="-1" face="Courier New, Courier, mono">@push{n;9}</font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font size="-1" face="Courier New, Courier, mono">gel.pop(&quot;n&quot;)</font></td>
+          <td><font size="-1" face="Courier New, Courier, mono">@unbind{n}</font></td>
+        </tr>
+        <tr valign="top"> 
+          <td><font size="-1" face="Courier New, Courier, mono">gel.pop(&quot;n&quot;)</font></td>
+          <td><font size="-1" face="Courier New, Courier, mono">@pop{n}</font></td>
+        </tr>
+      </table>
+      <p align="left"><em><font color="#993333" size="-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Not 
+        yet implemented.</font></em></p>
+      <h3>&nbsp;<strong><a name="3_4" id="3_4"></a><span>4.4 Parsing from Lua 
+        </span></strong></h3>
+      <p>&nbsp;&nbsp;Gel provides three lua functions to translate text according 
+        to gema rules:<br>
+        <font face="Courier New, Courier, mono">gel.parsestring()</font> and <font face="Courier New, Courier, mono">gel.parsefile()</font>and 
+        <font face="Courier New, Courier, mono">gel.parsestream()</font>.</p>
+      <table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr> 
+          <td valign="top"><pre class="ex">![
+list_type = &quot;&quot;     -- Set when the start of list is found
+
+
+
+function li_dot(dot)
+  gel.write(&quot;&lt;ld&gt;&quot;)
+  if list_type == &quot;desc&quot; then
+    gel.parsestring(dot,&quot;-&quot;,&quot;par&quot;)
+  elseif list_type == &quot;enum&quot; then
+    n=gel.get{&quot;i&quot;}
+    gel.write(n)
+    gel.set(&quot;i&quot;,n+1)
+  else
+    gel.write(dot)
+  end
+  gel.write(&quot;&lt;/ld&gt;\n&quot;)
+end
+!]
+
+list:\N\W[*]*\P\N\W[\G=&lt;li&gt;@lua{li_dot(&quot;$1&quot;)}@par{$2}
+ </pre></td>
+        </tr>
+      </table>
+      <p>&nbsp;</p>
+      <h3>&nbsp;&nbsp;</h3>
+      <p>&nbsp;</p>
+      <p align="center"><small>Gel was made by 
+        <script>a("net","users.sourceforge","rdentato")</script>
+        Remo Dentato</a> and enahanced by <em>Reuben Thomas</em>.</small></p>
+      </td>
+    <td width="2">&nbsp;</td>
+    <td width="150" align="center" valign="top" class="tl"><img src="side.png" width="137" height="447" border="0" usemap="#Map"></td>
+  </tr>
+  <!--
+  <tr><td  align="right" colspan="3" class="ssm"><font color="#CCCCCC" size="-1">Webdesign by Remo Dentato</font></td></tr>
+  -->
+</table>
+<map name="Map">
+  <area shape="rect" coords="7,32,132,69" href="http://sourceforge.net/projects/gema/" target="_blank">
+  <area shape="rect" coords="36,141,107,200" href="http://opensource.org/docs/definition.php">
+  <area shape="rect" coords="38,278,107,344" href="http://www.lua.org" target="_blank">
+  <area shape="rect" coords="48,407,95,442" href="links.html">
+</map>
+</body>
+</html>

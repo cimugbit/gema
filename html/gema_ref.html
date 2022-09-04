@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Gema</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.b16 {
+	font-size: 16pt;
+	font-weight: bold;
+}
+
+.a0 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: none;
+	color: #333366;
+}
+
+.a1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: underline;
+	color: #990000;
+}
+-->
+</style>
+<script language="JavaScript">
+var s="<a href=\""
+var r="mail"
+function a(w,x,y)
+{ t=y+"@"+x+"."+w;  document.write(s+r+"to:"+t+"\">")}  
+</script>
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="1">
+  <tr> 
+    <td width="240" height="62" valign="top" background="topbkg1.gif"><img src="logo2.jpg" width="265" height="52"></td>
+    <td width="45" background="topbkg2.gif">&nbsp;</td>
+    <td align="center" valign="middle" background="topbkg3.gif"><font size=-1>&nbsp;<br>
+      </font> | <a href="index.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">About</a> 
+      | <a href="dnld.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Downloads</a> 
+      | <a href="docs.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Documents</a> 
+      | <a href="links.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Links</a> 
+      |</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top" class="tr">
+      <H1 align="center"><br>
+        A general purpose macro processor</H1>
+<BLOCKQUOTE>David N. Gray <TT>&lt;dgray</TT><TT>@acm.org&gt;</TT></BLOCKQUOTE>
+<BLOCKQUOTE> 
+  <p>March 17, 1995 <BR>
+    Revised May 21 and August 20, 1995<br>
+    Revised November 30, 2003</p>
+</BLOCKQUOTE>
+&nbsp;
+<H2><A name="1Intrd">1</A> Introduction&nbsp;&nbsp;
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#2OprtOvrv" class="ssm"><font size="-1">next</font></a></H2>
+<P>This document is the user manual for <B>gema</B>, a program whose name stands 
+for <B>ge</B>neral purpose <B>ma</B>cro processor. This is a utility program 
+which is run as a shell command under Unix or MS-DOS and can be used for 
+performing conversions or translations of data files or extracting information 
+from files. 
+<P>The <TT>man</TT> page for <B>gema</B> provides a tutorial introduction and a 
+brief reference summary, while this document provides a more detailed 
+specification. It would probably be best to read the tutorial section first 
+before reading the rest of this document. The command line options are fully 
+documented in the <TT>man</TT> page, so will not be repeated here. 
+<P>This version of the document corresponds to version 1.2 of the program. (Note 
+that the <TT>-version</TT> option can be used to check which version you are 
+running.)
+<p align="right"> <a href="#1Intrd" classe="ssm">up</a>&nbsp;</p>
+
+<h2><A name="2OprtOvrv">2</A> Operational Overview&nbsp;&nbsp;
+ <a href="#1Intrd" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="notation.html#3Ntt" class="ssm"><font size="-1">next</font></a></h2>
+<P>The general model of operation is that the program reads an input file and 
+writes an output file which consists of the input data transformed in accordance 
+with a set of transformation rules provided by the user. A rule consists of a 
+<EM>template</EM> and an <EM>action</EM>. The template is a pattern which the 
+program will attempt to match with the input data. Any input text that matches a 
+template pattern will be replaced by the result of evaluating the rule's action. 
+There may be multiple sets of rules, where each set of rules is called a 
+<EM>domain</EM>. At any given time, translation is controlled by the rules of 
+one particular domain, but both templates and actions are able to switch to a 
+different domain for processing particular portions of the data. A domain can 
+inherit from another domain, meaning that if no match is found for the current 
+input text in any of the rules for the current domain, then the rules of the 
+inherited domain will be tried. 
+<P>Processing of a file begins using the default domain, whose name is the empty 
+string. First, if there is a rule with template ``<TT>\B</TT>'' (beginning of 
+file) or ``<TT>\A</TT>'' (beginning of data), then its action is performed. Then 
+the program begins reading the file. For each character position in the file, 
+the program attempts to find a rule in the current domain whose template pattern 
+matches the input text beginning at that point. If a match is found, then the 
+input stream is advanced to the end of the matched text and the rule's action is 
+executed. When no template matches the current position, the current character 
+is copied to the output file (unless the <TT>-match</TT> option is being used), 
+the input stream is advanced to the next character, and it tries to find a 
+template matching the text starting at that position. When the end of the input 
+file is reached, if there are any rules with template ``<TT>\E</TT>'' (end of 
+file) or ``<TT>\Z</TT>'' (end of data), their actions will be executed, and then 
+the files will be closed. 
+<P>However, if a template matches without advancing the input stream (for 
+example, if it begins with ``<TT>\P</TT>''), then after executing its action, 
+the search continues as though it had not matched. This is necessary to avoid 
+hanging in a loop repeating the same match forever. 
+<P>A rule may have an empty action, with the effect that the matching text is 
+simply discarded. In each domain there may be at most one rule with an empty 
+template, which signifies a default action to be taken when no other rule 
+matches. However, since an empty template does not cause the input stream to be 
+advanced and there are no more rules to try, this is only meaningful if the 
+corresponding action exits the current context by using one of <TT>@end</TT>, 
+<TT>@terminate</TT>, <TT>@fail</TT>, or <TT>@abort</TT>. 
+<P>Generally speaking, while looking for a match, the rules within a domain will 
+conceptually be tried in the same order in which they were defined, so wherever 
+there might be ambiguities, the user should define the rules for preferred 
+special cases before the rules for default general cases. However, there are 
+some important exceptions: 
+<UL>
+  <LI>Rules beginning with a literal character (including space or 
+  ``<TT>\S</TT>'') will be tried before rules beginning with an argument. 
+  (Operators that don't advance the input stream, such as ``<TT>\N</TT>'', 
+  ``<TT>\I</TT>'', or ``<TT>\L</TT>'', are ignored for the purpose of this 
+  determination.) The way this actually works is that the current input 
+  character is used as an array index to find the list of rules beginning with 
+  that character. If none are found, or none match, then the rules beginning 
+  with arguments are tried in sequence. 
+  <P></P>
+  <LI>If two rules begin with the same sequence of literal characters, the one 
+  with the longer literal string will be tried first. This is because if this 
+  were not done, a more specific rule appearing later would never match, which 
+  would surely not be what the user intended. 
+  <P></P>
+  <LI>If two rules have identical templates, the second rule will replace the 
+  first on the assumption that it is a redefinition.[<a name="fn1_b" href="#FN1">Footnote 1</a>]
+   </LI></UL>
+<P>Rules can be defined either as arguments of the <TT>-p</TT> command line 
+option or in pattern files loaded by the <TT>-f</TT> option. Each line in a 
+pattern file can be one of the following: 
+<UL>
+  <LI>A comment line, indicated by a ``<TT>!</TT>'' in the first column. 
+  <LI>Any blank lines are ignored. 
+  <LI>An immediate action - a line beginning with ``<TT>@</TT>'' can contain one 
+  or more function calls which will be evaluated immediately before reading the 
+  next line. Normally these should be functions that are used for their side 
+  effects and do not return a value. The most common case is using 
+  ``<TT>@set</TT>'' to initialize a variable. 
+  <LI>Any other line is expected to be a rule, which should contain a 
+  ``<TT>=</TT>'' separating the template and action. A line may contain multiple 
+  rules, separated by semicolons. A rule may be continued on another line by 
+  ending the line with a backslash, which causes the following newline to be 
+  ignored and skips over any leading spaces on the following line. 
+  <P>Rules may be preceded by a domain name followed by a colon, which causes 
+  all of the rules following on the same line to be defined in the designated 
+  domain. The domain name may optionally be enclosed in angle brackets, and any 
+  leading or trailing blanks will be ignored. If the domain is to be referenced 
+  in an action following ``<TT>@</TT>'', then the name should be limited to 
+  letters, digits, hyphen, and underscore. </P>
+  <LI>A line of the form ``<EM>name1</EM><TT>::</TT><EM>name2</EM>'' specifies 
+  that the domain named on the left inherits from the domain named on the right. 
+  Each domain can inherit from at most one other, but multiple levels of 
+  inheritance is allowed. </LI></UL>
+<P>A template may contain any of the following: 
+<UL>
+  <LI>Literal characters, which are to be exactly matched. Literal characters 
+  include letters, digits, special characters quoted by a backslash, control 
+  characters designated by backslash followed by a lower case letter or digit, 
+  control characters designated by ``<TT>^</TT>'' followed by a letter, and any 
+  other characters that don't have any special meaning. Any of the 256 possible 
+  characters can be used. 
+  <LI>Arguments, which match some variable portion of text, and remember the 
+  matched text so that it can be referenced later. There are several different 
+  kinds of arguments, which are denoted by ``<TT>*</TT>'', ``<TT>?</TT>'', 
+  ``<TT>#</TT>'', ``<TT>&lt;</TT><EM>...</EM><TT>&gt;</TT>''. and 
+  ``<TT>/</TT><EM>...</EM><TT>/</TT>''. The current implementation allows a 
+  template to have a maximum of twenty arguments. 
+  <LI>Template operators, denoted by a backslash followed by an upper case 
+  letter, or by the space character. These may set local options, impose 
+  additional requirements for a match, or allow skipping of redundant spaces in 
+  the input. 
+  <LI>A dollar sign may be used followed by a single letter or digit to insert 
+  the value of a variable or a previous argument into the text that is to be 
+  matched. (This does not currently work for ``<TT>*</TT>'' arguments.) </LI></UL>
+<P>An action may contain any of the following: 
+<UL>
+  <LI>Literal characters, which when evaluated simply copy themselves to the 
+  output stream. 
+  <LI>The value of a template argument can be output by using a dollar sign 
+  followed by the argument number (enclosed in braces if more than one digit), 
+  or by using the characters ``<TT>*</TT>'', ``<TT>?</TT>'', or ``<TT>#</TT>'' 
+  to denote the corresponding argument. 
+  <LI>The notation ``<TT>${</TT><EM>name</EM><TT>}</TT>'' can be used to output 
+  the value of a variable. 
+  <LI>The notation ``<TT>@</TT><EM>name</EM><TT>{</TT><EM>args</EM><TT>}</TT>'' 
+  can be used to call a built-in function or to translate the argument with a 
+  user-defined domain. 
+  <LI>Some of the operators denoted by a space or backslash followed by an upper 
+  case letter also apply in actions, typically for conditional output of spaces 
+  or newlines. </LI></UL><br>
+<p align="right"> <a href="#2OprtOvrv" classe="ssm">up</a>&nbsp;</p>
+<br>&nbsp;
+<hr>&nbsp;
+<a name="toc"></a>
+<H2>Table of Contents</H2>
+<A href="gema_ref.html#1Intrd">1 Introduction</A><BR>
+<A href="gema_ref.html#2OprtOvrv">2 Operational Overview</A><BR>
+<A href="notation.html#3Ntt">3 Notation<BR></A>
+&nbsp;&nbsp;<A href="notation.html#3.1Spcchrc">3.1 Special characters<BR></A>
+&nbsp;&nbsp;<A href="notation.html#3.2EscpSqun">3.2 Escape Sequences<BR></A>
+&nbsp;&nbsp;<A href="notation.html#3.3Rcgnrgumn">3.3 Recognizer arguments<BR></A>
+<A href="function.html#4BultFunct">4 Built-in Functions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.1Numbr">4.1 Numbers<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.2Strngfunct">4.2 String functions<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.1Outputfrmtpddn,flln,ndwrpp">4.2.1 Output formatting -- padding, filling, and wrapping<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.2StrngCmpr">4.2.2 String Comparison<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.3Cscnvr">4.2.3 Case conversion<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.4Msclstrngfunct">4.2.4 Miscellaneous string functions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.3Vrb">4.3 Variables<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.4Fls">4.4 Files<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.4.1Pthnmnpu">4.4.1 Pathname manipulation<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.4.2Usngltrnnputndutputfls">4.4.2 Using alternate input and output files<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.4.3Flcntxqur">4.4.3 File context queries<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.5Cntrflwfunct">4.5 Control flow functions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.6Othrprtsystmntrf">4.6 Other operating system interfaces<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.7Dfn">4.7 Definitions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.8SttnOptn">4.8 Setting Options<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.9Infrmfunct">4.9 Informational functions<BR>
+</A> <A href="function.html#4.10Lrltdfnctns"> </A> <A href="conclude.html#5Custmcmmnprcs">5 
+Customized command-line processing<BR>
+</A>
+<A href="conclude.html#6Extcds">6 Exit codes<BR></A>
+<A href="conclude.html#7SttusndFuturdvl">7 Status and Future development<BR></A>
+<A href="conclude.html#8Acknw">8 Acknowledgments</A> 
+<br>&nbsp;
+<hr>&nbsp;
+<br>&nbsp;
+<H2>Footnotes</H2>
+<P><A name=FN1><b>Footnote 1</b></A>:<BR>
+        This policy was adopted before <TT>@undef</TT> had been invented; it might 
+        be better to warn about duplicates and require explicit undefinition before 
+        redefining. (<a href="#fn1_b">back</a>)</P>
+</td>
+    <td width="2">&nbsp;</td>
+    <td width="150" align="center" valign="top" class="tl"><img src="side.png" width="137" height="447" border="0" usemap="#Map"></td>
+  </tr>
+  <!--
+  <tr><td  align="right" colspan="3" class="ssm"><font color="#CCCCCC" size="-1">Webdesign by Remo Dentato</font></td></tr>
+  -->
+</table>
+<map name="Map">
+  <area shape="rect" coords="7,32,132,69" href="http://sourceforge.net/projects/gema/" target="_blank">
+  <area shape="rect" coords="36,141,107,200" href="http://opensource.org/docs/definition.php">
+  <area shape="rect" coords="38,278,107,344" href="http://www.lua.org" target="_blank">
+  <area shape="rect" coords="48,407,95,442" href="links.html">
+</map>
+</body>
+</html>
+

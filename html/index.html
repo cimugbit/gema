@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<title>Gema</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.b16 {
+	font-size: 16pt;
+	font-weight: bold;
+}
+
+.a0 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: none;
+	color: #333366;
+}
+
+.a1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: underline;
+	color: #990000;
+}
+-->
+</style>
+<script language="JavaScript">
+var s="<a href=\""
+var r="mail"
+function a(w,x,y)
+{ t=y+"@"+x+"."+w;  document.write(s+r+"to:"+t+"\">")}  
+</script>
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="1">
+  <tr> 
+    <td width="240" height="62" valign="top" background="topbkg1.gif"><img src="logo2.jpg" width="265" height="52"></td>
+    <td width="45" background="topbkg2.gif">&nbsp;</td>
+    <td align="center" valign="middle" background="topbkg3.gif"><font size=-1>&nbsp;<br>
+      </font> | <a href="index.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">About</a> 
+      | <a href="dnld.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Downloads</a> 
+      | <a href="docs.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Documents</a> 
+      | <a href="links.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Links</a> 
+      |</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top" class="tr">
+  <p>&nbsp;</p>
+      <H1 align="center">The general purpose <br>
+        macro processor </H1>
+<H2>Introduction</H2>
+<p><code>gema</code> is a general purpose text processing utility based on the concept 
+of pattern matching. In general, it reads an input file and copies it to an output 
+file, while performing certain transformations to the data as specified by a set 
+of patterns defined by the user. It can be used to do the sorts of things that 
+are done by Unix utilities such as <TT>cpp</TT>, <TT>grep</TT>, <TT>sed</TT>, 
+<TT>awk</TT>, or <TT>strings</TT>. It can be used as a macro processor, but it 
+is much more general than <TT>cpp</TT> or <TT>m4</TT> because it does not impose 
+any particular syntax for what a macro call looks like. Unlike utilities like 
+<TT>sed</TT> or <TT>awk</TT>, <TT>gema</TT> can deal with patterns that span multiple 
+lines and with nested constructs. It is also distinguished by being able to use 
+multiple sets of rules to be used in different contexts. </p>
+<p>Included with the program are examples of pattern files for using it to convert 
+  documents to HTML from LaTeX or <CODE>nroff -man</CODE>. </p>
+      <p><tt>gema</tt> has been extended with a binding to the scripting language 
+        <a href="http://www.lua.org"><tt>Lua</tt></a>, named <a href="gel.html"><tt>GeL</tt></a>, 
+        that provides the ability of executing piece of Lua code in gema actions. 
+        It also may be used to add gema powerful matching capabilities to any 
+        Lua-enabled software. See the appropriate <a href="gel.html">page</a> 
+        in the documentation section for details. </p>
+      <H2>Documentation</H2>
+      <p>Look at the <a href="docs.html">documents</a> page to read online, or 
+        download, man page, reference manual and other material.</p>
+      <H2>How to get it</H2>
+      <p>Check the latest release at <a href="http://sourceforge.net/projects/gema/">Source Forge</a></p> 
+      <H2>Status</H2>
+      <p><code>gema</code> is currently in a stable status, no further features 
+        are planned for the time being. </p>
+      <H2>License</H2>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td><img src="osi-certified-60x50.gif" width="60" height="50" hspace="10" align="middle"></td>
+          <td>Gema licence follows the &quot;<a href="http://www.opensource.org/licenses/historical.php" target="_blank"><em>Historical 
+            Permission Notice and Disclaimer</em></a>&quot; template and is Open 
+            Source Software according to the <a href="http://opensource.org/docs/definition.php" target="_blank">OSI 
+            definition.</a></td>
+        </tr>
+      </table>
+      <br>
+      Copyright notice:<br>
+      <ul>
+        This software includes parts of "gema", the general-purpose macro translator. 
+        <br>
+        GEMA is &copy; by David N. Gray &lt;DGray&#64;ac<script>document.write("m.o")</script>rg&gt; <br>
+        (Visit http://gema.sourceforge.net/ for further details) 
+      </ul>
+      <br>
+      Permission to use, copy, modify and distribute Gema and its documentation 
+      for any purpose is hereby granted without fee, provided that the above copyright 
+      notice appear in all copies and supporting documentation.<br>
+      <br>
+      Different representations of the above copyright notice are acceptable as 
+      long as they contain the same information.<br>
+      <br>
+      Copyright holder makes no representations about the suitability of this 
+      software for any purpose. It is provided &quot;as is&quot; without express 
+      or implied warranty.<br>
+      <br>
+      <script>a("org","acm","dgray")</script>David N. Gray</a> March, 2004
+</td>
+    <td width="2">&nbsp;</td>
+    <td width="150" align="center" valign="top" class="tl"><img src="side.png" width="137" height="447" border="0" usemap="#Map"></td>
+  </tr>
+  <!--
+  <tr><td  align="right" colspan="3" class="ssm"><font color="#CCCCCC" size="-1">Webdesign by Remo Dentato</font></td></tr>
+  -->
+</table>
+<map name="Map">
+  <area shape="rect" coords="7,32,132,69" href="http://sourceforge.net/projects/gema/" target="_blank">
+  <area shape="rect" coords="36,141,107,200" href="http://opensource.org/docs/definition.php">
+  <area shape="rect" coords="38,278,107,344" href="http://www.lua.org" target="_blank">
+  <area shape="rect" coords="48,407,95,442" href="links.html">
+</map>
+</body>
+</html>
+
+

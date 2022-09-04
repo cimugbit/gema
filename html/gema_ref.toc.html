@@ -1,0 +1,375 @@
+<!--
+ -------------------------------------------------------------------------
+                        Outline style tree view
+
+                     by Hartmut Schaefer, 2005-2007
+
+   implementation ideas taken from http://opensource.adobe.com/tree.html
+ -------------------------------------------------------------------------
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/xhtml;charset=iso-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Gema</title>
+    <style type="text/css">
+    <!--
+    .heading { font-size: 8pt; font-family: sans-serif; }
+    .heading h3 { margin-bottom: 8px; margin-top: 0px; font-size: 10pt; }
+    .heading span { font-size: 7pt; font-family: sans-serif; color: #0000ff; cursor: pointer; }
+    .directory { font-size: 8pt; font-family: sans-serif; }
+    .directory p { margin: 0px; white-space: nowrap; }
+    .directory div { display: none; margin: 0px; }
+    .directory span { font-family: courier; color: #ff0000; cursor: pointer; }
+    -->
+    </style>
+    <script type="text/javascript">
+    <!-- // Hide script from old browsers
+
+    var cookieName = "gema_ref"
+
+    function nextElement(node)
+    {
+      var result = node.nextSibling
+      while ((result != null) && (result.tagName == null)) result = result.nextSibling
+      return result
+    }
+
+    function previousElement(node)
+    {
+      var result = node.previousSibling
+      while ((result != null) && (result.tagName == null)) result = result.previousSibling
+      return result
+    }
+
+    function toggleFolder(toggle, deep) 
+    {
+      var folder = nextElement(toggle.parentNode)
+      var textNode = toggle.firstChild
+      var flag = textNode.nodeValue
+      if (flag == "+")
+      {
+        textNode.nodeValue = "-"
+        folder.style.display = "block"
+      }
+      else if (flag == "-")
+      {
+        textNode.nodeValue = "+"
+        folder.style.display = "none"
+      }
+      if (deep)
+      {
+        var subfolder = nextElement(folder.firstChild)
+        while (subfolder != null)
+        {
+          if ((subfolder.getAttribute != null) && (subfolder.getAttribute("name") == "folder"))
+          {
+            var subfoldertoggle = previousElement(subfolder).firstChild
+            subfoldertoggle.firstChild.nodeValue = flag
+            toggleFolder(subfoldertoggle, deep)
+          }
+          subfolder = nextElement(subfolder)
+        }
+      }
+    }
+
+    function toggleOutline(action) 
+    {
+      var toggles = document.getElementsByTagName("span")
+      var toggle
+      var folder
+      var textNode
+      for (i = 0; i < toggles.length; ++i)
+      {
+        toggle = toggles[i]
+        if (toggle.getAttribute("name") == "toggle")
+        {
+          folder = nextElement(toggle.parentNode)
+          textNode = toggle.firstChild
+          if ((textNode.nodeValue == "+") && (action == 1))
+          {
+            textNode.nodeValue = "-"
+            folder.style.display = "block"
+          }
+          else if ((textNode.nodeValue == "-") && (action == 0))
+          {
+            textNode.nodeValue = "+"
+            folder.style.display = "none"
+          }
+        }
+      }
+    }
+
+    function searchOutline(text, display)
+    {
+      var entries = document.getElementsByName("text")
+      text = text.toLowerCase()
+      var matches = 0
+      for ( i = 0; i < entries.length; ++i )
+      {
+        var entry = entries.item(i)
+        var entryText = entry.innerHTML.toLowerCase()
+        if (entryText.indexOf(text) >= 0)
+        {
+          ++matches
+          entry.style.backgroundColor = "yellow"
+          folder = entry.parentNode
+          while (folder != null)
+          {
+            if ((folder.getAttribute != null) && (folder.getAttribute("name") == "folder"))
+            {
+              var toggle = previousElement(folder).firstChild
+              if (toggle.firstChild.nodeValue == "+")
+              {
+                toggle.firstChild.nodeValue = "-"
+                folder.style.display = "block"
+              }
+            }
+            folder = folder.parentNode
+          }
+          if (matches == 1)
+          {
+              entry.focus()
+          }
+        }
+        else
+        {
+          entry.style.backgroundColor = "transparent"
+        }
+      }
+      display.title = text + ": " + matches + " matches"
+      display.style.backgroundColor = "LightGrey"
+    }
+
+    function saveOutlineState()
+    {
+      if (cookieName == "")
+      {
+        return
+      }
+      var outlineState = new Array()
+      var toggles = document.getElementsByTagName("span")
+      var toggle
+      var j = 0
+      for (i = 0; i < toggles.length; ++i)
+      {
+        toggle = toggles[i]
+        if (toggle.getAttribute("name") == "toggle")
+        {
+          outlineState[j++] = toggle.firstChild.nodeValue
+        }
+      }
+      var expires = new Date((new Date()).getTime() + 365*24*3600*1000)
+      document.cookie = cookieName + "=" + outlineState.join("") + ";expires=" + expires.toUTCString() + ";"
+    }
+
+    function restoreOutlineState()
+    {
+      if (cookieName == "")
+      {
+        return
+      }
+      var cookieString = document.cookie
+      var start = cookieString.indexOf(cookieName + "=", 0)
+      if (start < 0)
+      {
+        return
+      }
+      start = start + cookieName.length + 1
+      var stop = cookieString.indexOf(";", start)
+      if (stop == -1)
+      {
+        stop = cookieString.length
+      }
+      var spans = document.getElementsByTagName("span")
+      var toggles = new Array()
+      var j = 0
+      for (i = 0; i < spans.length; ++i)
+      {
+        if (spans[i].getAttribute("name") == "toggle")
+        {
+          toggles[j++] = spans[i]
+        }
+      }
+      if (toggles.length != (stop-start))
+      {
+        return
+      }
+      var outlineState = cookieString.substring(start, stop)
+      var folder
+      var toggle
+      var flag
+      for (i = 0; i < outlineState.length; ++i)
+      {
+        toggle = toggles[i]
+        folder = nextElement(toggle.parentNode)
+        flag = outlineState.substring(i, i+1)
+        toggle.firstChild.nodeValue = flag
+        if (flag == "-")
+        {
+          folder.style.display = "block"
+        }
+        else
+        {
+          folder.style.display = "none"
+        }
+      }
+    }
+
+
+
+    // End script hiding -->        
+    </script>
+  </head>
+
+  <body onLoad="restoreOutlineState()" onUnload="saveOutlineState()">
+    <div class="heading">
+      <table border=0 width=100%><tr><td><h3>Gema</h3></td><td align="right" valign="top"><span onClick="toggleOutline(1)">[Expand]</span> <span onClick="toggleOutline(0)">[Collapse]</span> <span onClick="q=prompt('Search...','');if(q){return searchOutline(q,this)}">[Search]</span></td></font></tr></table>
+    </div>
+    <div class="directory">
+      <div style="display: block; text-indent: 0px">
+      <p><span>&nbsp;</span> <a name="text" href="gema_ref.html#1Intrd" target="content" title="1 Introduction&nbsp;&nbsp;">1 Introduction&nbsp;&nbsp;</a></p>
+      <p><span>&nbsp;</span> <a name="text" href="gema_ref.html#2OprtOvrv" target="content" title="2 Operational Overview&nbsp;&nbsp;">2 Operational Overview&nbsp;&nbsp;</a></p>
+      <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="notation.html#3Ntt" target="content" title="3 Notation&nbsp;&nbsp;">3 Notation&nbsp;&nbsp;</a></p>
+      <div name="folder" style="text-indent: 12px">
+        <p><span>&nbsp;</span> <a name="text" href="notation.html#3.1Spcchrc" target="content" title="3.1 Special characters&nbsp;&nbsp;">3.1 Special characters&nbsp;&nbsp;</a></p>
+        <p><span>&nbsp;</span> <a name="text" href="notation.html#3.2EscpSqun" target="content" title="3.2 Escape Sequences&nbsp;&nbsp;">3.2 Escape Sequences&nbsp;&nbsp;</a></p>
+        <p><span>&nbsp;</span> <a name="text" href="notation.html#3.3Rcgnrgumn" target="content" title="3.3 Recognizer arguments&nbsp;&nbsp;">3.3 Recognizer arguments&nbsp;&nbsp;</a></p>
+      </div>
+      <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4BultFunct" target="content" title="4 Built-in Functions&nbsp;&nbsp;">4 Built-in Functions&nbsp;&nbsp;</a></p>
+      <div name="folder" style="text-indent: 12px">
+        <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.1Numbr" target="content" title="4.1 Numbers&nbsp;&nbsp;">4.1 Numbers&nbsp;&nbsp;</a></p>
+        <div name="folder" style="text-indent: 24px">
+          <p><span>&nbsp;</span> <a name="text" href="function.html#add" target="content" title="@add">@add</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#sub" target="content" title="@sub">@sub</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#mul" target="content" title="@mul">@mul</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#div" target="content" title="@div">@div</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#mod" target="content" title="@mod">@mod</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#and" target="content" title="@and">@and</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#or" target="content" title="@or">@or</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#not" target="content" title="@not">@not</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#cmpn" target="content" title="@cmpn{number;number; ">@cmpn{number;number; </a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#int-char" target="content" title="@int-char">@int-char</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#char-int" target="content" title="@char-int">@char-int</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#radix" target="content" title="@radix">@radix</a></p>
+        </div>
+        <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.2Strngfunct" target="content" title="4.2 String functions&nbsp;&nbsp;">4.2 String functions&nbsp;&nbsp;</a></p>
+        <div name="folder" style="text-indent: 24px">
+          <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.2.1Outputfrmtpddn,flln,ndwrpp" target="content" title="4.2.1 Output formatting --  padding, filling, and wrapping&nbsp;&nbsp;">4.2.1 Output formatting --  padding, filling, and wrapping&nbsp;&nbsp;</a></p>
+          <div name="folder" style="text-indent: 36px">
+            <p><span>&nbsp;</span> <a name="text" href="function.html#left" target="content" title="@left">@left</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#right" target="content" title="@right">@right</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#center" target="content" title="@center">@center</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#fill-left" target="content" title="@fill-left">@fill-left</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#fill-right" target="content" title="@fill-right">@fill-right</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#fill-center" target="content" title="@fill-center">@fill-center</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#tab" target="content" title="@tab">@tab</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#wrap" target="content" title="@wrap">@wrap</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#set-wrap" target="content" title="@set-wrap">@set-wrap</a></p>
+          </div>
+          <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.2.2StrngCmpr" target="content" title="4.2.2 String Comparison&nbsp;&nbsp;">4.2.2 String Comparison&nbsp;&nbsp;</a></p>
+          <div name="folder" style="text-indent: 36px">
+            <p><span>&nbsp;</span> <a name="text" href="function.html#cmps" target="content" title="@cmps">@cmps</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#cmpi" target="content" title="@cmpi">@cmpi</a></p>
+          </div>
+          <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.2.3Cscnvr" target="content" title="4.2.3 Case conversion&nbsp;&nbsp;">4.2.3 Case conversion&nbsp;&nbsp;</a></p>
+          <div name="folder" style="text-indent: 36px">
+            <p><span>&nbsp;</span> <a name="text" href="function.html#upcase" target="content" title="@upcase">@upcase</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#downcase" target="content" title="@downcase">@downcase</a></p>
+          </div>
+          <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.2.4Msclstrngfunct" target="content" title="4.2.4 Miscellaneous string functions&nbsp;&nbsp;">4.2.4 Miscellaneous string functions&nbsp;&nbsp;</a></p>
+          <div name="folder" style="text-indent: 36px">
+            <p><span>&nbsp;</span> <a name="text" href="function.html#length" target="content" title="@length">@length</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#reverse" target="content" title="@reverse">@reverse</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#substring" target="content" title="@substring">@substring</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#repeat" target="content" title="@repeat">@repeat</a></p>
+          </div>
+        </div>
+        <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.3Vrb" target="content" title="4.3 Variables&nbsp;&nbsp;">4.3 Variables&nbsp;&nbsp;</a></p>
+        <div name="folder" style="text-indent: 24px">
+          <p><span>&nbsp;</span> <a name="text" href="function.html#set" target="content" title="@set">@set</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#var" target="content" title="@var">@var</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#var" target="content" title="@var">@var</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#append" target="content" title="@append">@append</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#incr" target="content" title="@incr">@incr</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#decr" target="content" title="@decr">@decr</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#bind" target="content" title="@bind">@bind</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#unbind" target="content" title="@unbind">@unbind</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#push" target="content" title="@push">@push</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#pop" target="content" title="@pop">@pop</a></p>
+        </div>
+        <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.4Fls" target="content" title="4.4 Files&nbsp;&nbsp;">4.4 Files&nbsp;&nbsp;</a></p>
+        <div name="folder" style="text-indent: 24px">
+          <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.4.1Pthnmnpu" target="content" title="4.4.1 Pathname manipulation&nbsp;&nbsp;">4.4.1 Pathname manipulation&nbsp;&nbsp;</a></p>
+          <div name="folder" style="text-indent: 36px">
+            <p><span>&nbsp;</span> <a name="text" href="function.html#makepath" target="content" title="@makepath">@makepath</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#mergepath" target="content" title="@mergepath">@mergepath</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#relative-path" target="content" title="@relative-path">@relative-path</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#expand-wild" target="content" title="@expand-wild">@expand-wild</a></p>
+          </div>
+          <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.4.2Usngltrnnputndutputfls" target="content" title="4.4.2 Using alternate input and  output files&nbsp;&nbsp;">4.4.2 Using alternate input and  output files&nbsp;&nbsp;</a></p>
+          <div name="folder" style="text-indent: 36px">
+            <p><span>&nbsp;</span> <a name="text" href="function.html#err" target="content" title="@err">@err</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#out" target="content" title="@out">@out</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#write" target="content" title="@write">@write</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#close" target="content" title="@close">@close</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#read" target="content" title="@read">@read</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#probe" target="content" title="@probe">@probe</a></p>
+          </div>
+          <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.4.3Flcntxqur" target="content" title="4.4.3 File context queries&nbsp;&nbsp;">4.4.3 File context queries&nbsp;&nbsp;</a></p>
+          <div name="folder" style="text-indent: 36px">
+            <p><span>&nbsp;</span> <a name="text" href="function.html#outpath" target="content" title="@outpath">@outpath</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#inpath" target="content" title="@inpath">@inpath</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#file" target="content" title="@file">@file</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#line" target="content" title="@line">@line</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#column" target="content" title="@column">@column</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#out-column" target="content" title="@out-column">@out-column</a></p>
+            <p><span>&nbsp;</span> <a name="text" href="function.html#file-time" target="content" title="@file-time">@file-time</a></p>
+          </div>
+        </div>
+        <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.5Cntrflwfunct" target="content" title="4.5 Control flow functions&nbsp;&nbsp;">4.5 Control flow functions&nbsp;&nbsp;</a></p>
+        <div name="folder" style="text-indent: 24px">
+          <p><span>&nbsp;</span> <a name="text" href="function.html#end" target="content" title="@end">@end</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#fail" target="content" title="@fail">@fail</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#terminate" target="content" title="@terminate">@terminate</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#abort" target="content" title="@abort">@abort</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#exit-status" target="content" title="@exit-status">@exit-status</a></p>
+        </div>
+        <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.6Othrprtsystmntrf" target="content" title="4.6 Other operating system interfaces&nbsp;&nbsp;">4.6 Other operating system interfaces&nbsp;&nbsp;</a></p>
+        <div name="folder" style="text-indent: 24px">
+          <p><span>&nbsp;</span> <a name="text" href="function.html#date" target="content" title="@date">@date</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#datime" target="content" title="@datime">@datime</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#time" target="content" title="@time">@time</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#getenv" target="content" title="@getenv">@getenv</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#shell" target="content" title="@shell">@shell</a></p>
+        </div>
+        <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.7Dfn" target="content" title="4.7 Definitions&nbsp;&nbsp;">4.7 Definitions&nbsp;&nbsp;</a></p>
+        <div name="folder" style="text-indent: 24px">
+          <p><span>&nbsp;</span> <a name="text" href="function.html#define" target="content" title="@define">@define</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#quote" target="content" title="@quote">@quote</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#undefine" target="content" title="@undefine">@undefine</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#subst" target="content" title="@subst">@subst</a></p>
+        </div>
+        <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.8SttnOptn" target="content" title="4.8 Setting Options&nbsp;&nbsp;">4.8 Setting Options&nbsp;&nbsp;</a></p>
+        <div name="folder" style="text-indent: 24px">
+          <p><span>&nbsp;</span> <a name="text" href="function.html#set-switch" target="content" title="@set-switch">@set-switch</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#get-switch" target="content" title="@get-switch">@get-switch</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#set-parm" target="content" title="@set-parm">@set-parm</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#set-syntax" target="content" title="@set-syntax">@set-syntax</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#reset-syntax" target="content" title="@reset-syntax">@reset-syntax</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#set-locale" target="content" title="@set-locale">@set-locale</a></p>
+        </div>
+        <p><span title="use Ctrl-click to deeply expand/collapse section" name="toggle" onclick="toggleFolder(this, event.ctrlKey)">+</span> <a name="text" href="function.html#4.9Infrmfunct" target="content" title="4.9 Informational functions&nbsp;&nbsp;">4.9 Informational functions&nbsp;&nbsp;</a></p>
+        <div name="folder" style="text-indent: 24px">
+          <p><span>&nbsp;</span> <a name="text" href="function.html#show-help" target="content" title="@show-help">@show-help</a></p>
+          <p><span>&nbsp;</span> <a name="text" href="function.html#version" target="content" title="@version">@version</a></p>
+        </div>
+      </div>
+      <p><span>&nbsp;</span> <a name="text" href="conclude.html#5Custmcmmnprcs" target="content" title="5 Customized command-line processing&nbsp;&nbsp;">5 Customized command-line processing&nbsp;&nbsp;</a></p>
+      <p><span>&nbsp;</span> <a name="text" href="conclude.html#6Extcds" target="content" title="6 Exit codes&nbsp;&nbsp;">6 Exit codes&nbsp;&nbsp;</a></p>
+      <p><span>&nbsp;</span> <a name="text" href="conclude.html#7SttusndFuturdvl" target="content" title="7 Status and Future development&nbsp;&nbsp;">7 Status and Future development&nbsp;&nbsp;</a></p>
+      <p><span>&nbsp;</span> <a name="text" href="conclude.html#8Acknw" target="content" title="8 Acknowledgments&nbsp;&nbsp;">8 Acknowledgments&nbsp;&nbsp;</a></p>
+      </div>
+    </div>
+  </body>
+</html>

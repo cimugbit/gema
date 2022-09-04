@@ -1,0 +1,947 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Gema</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.b16 {
+	font-size: 16pt;
+	font-weight: bold;
+}
+
+.a0 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: none;
+	color: #333366;
+}
+
+.a1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16pt;
+	font-weight: bold;
+	text-decoration: underline;
+	color: #990000;
+}
+-->
+</style>
+<script language="JavaScript">
+var s="<a href=\""
+var r="mail"
+function a(w,x,y)
+{ t=y+"@"+x+"."+w;  document.write(s+r+"to:"+t+"\">")}  
+</script>
+</head>
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="1">
+  <tr> 
+    <td width="240" height="62" valign="top" background="topbkg1.gif"><img src="logo2.jpg" width="265" height="52"></td>
+    <td width="45" background="topbkg2.gif">&nbsp;</td>
+    <td align="center" valign="middle" background="topbkg3.gif"><font size=-1>&nbsp;<br>
+      </font> | <a href="index.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">About</a> 
+      | <a href="dnld.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Downloads</a> 
+      | <a href="docs.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Documents</a> 
+      | <a href="links.html" onMouseOut="this.className='a0'" onMouseOver="this.className='a1'" class="a0">Links</a> 
+      |</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top" class="tr">
+      <br>
+      <H2><A name=4BultFunct>4</A> Built-in Functions&nbsp;&nbsp;
+ <a href="notation.html#3.3Rcgnrgumn" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.1Numbr" class="ssm"><font size="-1">next</font></a></H2>
+There are a large number of 
+built-in functions that can be used in actions. Function calls have the form 
+``<TT>@</TT><I>name</I><TT>{</TT><I>args</I><TT>}</TT>'', with arguments 
+separated by ``<TT>;</TT>''. For functions without arguments, the argument 
+delimiters ``<TT>{}</TT>'' may be omitted if they are not needed to separate the 
+name from the following character.[<A name="fn1_b" href="#FN1">Footnote 
+1</A>] Each argument is itself an action which can use any of the special 
+characters defined in actions, including nested function calls. The argument 
+value is the result of evaluating the argument. In a few cases, arguments that 
+are not used are skipped instead of being evaluated, but arguments are never 
+used literally. All functions take a fixed number of arguments, although in a 
+couple of cases the last argument is optional. 
+<P>The descriptions of the functions use the terminology of a value being 
+returned by the function, but it would be more accurate to speak of the result 
+as being the series of characters that will be written to the current output 
+stream, since in general the result value is not actually materialized as a 
+separate string. Usually while evaluating a function argument, the current 
+output stream is an internal buffer that collects the argument value for the 
+function, and the function argument is actually an input stream that reads from 
+that buffer. But in most cases these distinctions are not important for 
+understanding how to use the functions. 
+<P>The following sections document groups of related functions. 
+<p align="right"> <a href="#4BultFunct" classe="ssm">up</a>&nbsp;</p>
+
+<H3><A name="4.1Numbr">4.1</A> Numbers&nbsp;&nbsp;
+ <a href="#4BultFunct" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.2Strngfunct" class="ssm"><font size="-1">next</font></a></H3>
+Since <B>gema</B> is a text processor, 
+it is not intended to be convenient or efficient for performing numeric 
+operations, but it does have a set of arithmetic functions that should be 
+sufficient to make it possible to do whatever calculations are necessary. 
+<P>While all values are character strings, a string can be treated as a number 
+if it consists of decimal digits optionally preceded by <TT>+</TT> or <TT>-</TT> 
+and optionally preceded or followed by spaces. Where a numeric argument is 
+required, such a string will be converted internally to a 32-bit signed integer. 
+An error will be reported if the string is not a valid number. Functions that 
+return a number will return a string of decimal digits possibly preceded by a 
+minus sign. 
+<P>Following are the arithmetic functions: 
+<DL>
+  <DT><TT>@<A name="add">add</A>{</TT><I>number</I><TT>;</TT><I>number</I><TT>}</TT>
+  <DD>Addition - returns the sum of the two numbers. 
+  <DT><TT>@<A name="sub">sub</A>{</TT><I>number</I><TT>;</TT><I>number</I><TT>}</TT>
+  <DD>Subtraction - returns the first argument minus the second. 
+  <DT><TT>@<A name="mul">mul</A>{</TT><I>number</I><TT>;</TT><I>number</I><TT>}</TT>
+  <DD>Multiplication - returns the product of the two numbers. 
+  <DT><TT>@<A name="div">div</A>{</TT><I>number</I><TT>;</TT><I>number</I><TT>}</TT>
+  <DD>Division - returns the quotient of dividing the first argument by the 
+  second. 
+  <DT><TT>@<A name="mod">mod</A>{</TT><I>number</I><TT>;</TT><I>number</I><TT>}</TT>
+  <DD>Modulus - returns the first argument modulo the second, as implemented by 
+  the C operator ``<TT>%</TT>''. </DD></DL>
+<P>Also, the following group of functions can be used to operate on numbers as 
+bit strings: 
+<DL>
+  <DT><TT>@<A name="and">and</A>{</TT><I>number</I><TT>;</TT><I>number</I><TT>}</TT>
+  <DD>Returns the bit-wise <I>and</I> of the two numbers. 
+  <DT><TT>@<A name="or">or</A>{</TT><I>number</I><TT>;</TT><I>number</I><TT>}</TT>
+  <DD>Returns the bit-wise <I>or</I> of the two numbers. 
+  <DT><TT>@<A name="not">not</A>{</TT><I>number</I><TT>}</TT>
+  <DD>Returns the bit-wise inverse of the argument. </DD></DL>
+<P>Finally, some other assorted functions that deal with numbers: 
+<DL>
+  <DT><TT>@<A name="cmpn">cmpn</A>{</TT><I>number</I><TT>;</TT><I>number</I><TT>;</TT> 
+  <I>less-value</I><TT>;</TT><I>equal-value</I><TT>;</TT><I>greater-value</I><TT>}</TT>
+  <DD>Compare numbers - returns the result of evaluating either the third, 
+  fourth, or fifth argument depending on whether the first argument is less 
+  than, equal to, or greater than the second, when compared as 32-bit signed 
+  numbers. The two arguments that are not used are not evaluated. For example, 
+  the following rule defines a function that will return the larger of two 
+  comma-separated 
+  numbers:<BR><TT>maxn:&lt;N&gt;,&lt;N&gt;=@cmpn{$1;$2;$2;$1;$1}</TT><BR>while 
+  the following rule sets a variable to the largest number 
+  seen:<BR><TT>notemax:&lt;N&gt;=@cmpn{$1;${max};;;@set{max;$1}}</TT><BR>
+  <DT><TT>@<A name="int-char">int-char</A>{</TT><I>number</I><TT>}</TT>
+  <DD>Returns the character whose internal code is given by the argument. 
+  <DT><TT>@<A name="char-int">char-int</A>{</TT><I>character</I><TT>}</TT>
+  <DD>Returns the decimal number representation of the internal character code 
+  of the argument, which should be a single-character string. 
+  <DT><TT>@<A name="radix">radix</A>{</TT><I>from</I><TT>;</TT><I>to</I><TT>;</TT><I>value</I><TT>}</TT>
+  <DD>Radix conversion. The first two arguments must be decimal integers. The 
+  third argument is interpreted as a number whose base is specified by the first 
+  argument. The result value is that number represented in the base specified by 
+  the second argument. As currently implemented, <I>from</I> may be any number 
+  from 2 to 32, but <I>to</I> can only be one of 8, 10, or 16. For example, 
+  octal constants in a C program could be converted to hexadecimal form by the 
+  following rule: <BR><TT>\I0&lt;O&gt;\I=0x@radix{8;16;$1}</TT> <BR>For 
+  hexadecimal output, upper case letters are used for the digits greater than 9. 
+  If lower case letters are desired, the <TT>@downcase</TT> function can be used 
+  on the value returned by <TT>@radix</TT>. </DD></DL>
+<p align="right"> <a href="#4.1Numbr" classe="ssm">up</a>&nbsp;</p>
+<H3><A name=4.2Strngfunct>4.2</A> String functions&nbsp;&nbsp;
+ <a href="#4.1Numbr" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.2.1Outputfrmtpddn,flln,ndwrpp" class="ssm"><font size="-1">next</font></a></H3>
+<P>The following built-in functions perform various manipulations on character 
+strings. 
+<p align="right"> <a href="#4.2Strngfunct" classe="ssm">up</a>&nbsp;</p>
+<H4><A name=4.2.1Outputfrmtpddn,flln,ndwrpp>4.2.1</A> Output formatting -- 
+padding, filling, and wrapping&nbsp;&nbsp;
+ <a href="#4.2Strngfunct" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.2.2StrngCmpr" class="ssm"><font size="-1">next</font></a></H4>
+<P>The following group of functions take two arguments; the first must be a 
+number and the second is an arbitrary string. If the length of the string is 
+greater than the number, then it is returned unchanged. Otherwise, the returned 
+value will consist of the string padded with spaces to be of the designated 
+length. The choice of function determines how the padding is done: 
+<DL>
+  <DT><TT>@<A name="left">left</A>{</TT><I>length</I><TT>;</TT><I>string</I><TT>}</TT>
+  <DD>Left-justify the string, padding with spaces to the designated length. For 
+  example, ``<TT>@left{8;ab}</TT>'' returns ``<TT>ab</TT>'' followed by 6 
+  spaces, while ``<TT>@left{8;hippopotamus}</TT>'' returns ``hippopotamus'' with 
+  no spaces. If you want long values to be truncated, you can use: 
+  <BR><TT>@left{</TT><I>length</I><TT>;@substring{0;</TT><I>length</I><TT>;</TT><I>string</I><TT>}}</TT> 
+  <BR>or write something like ``<TT>@left{8;@cut8{</TT><I>arg</I><TT>}}</TT>'', 
+  accompanied by the rule: ``<TT>cut8:&lt;U8&gt;=$1@end</TT>''. 
+  <DT><TT>@<A name="right">right</A>{</TT><I>length</I><TT>;</TT><I>string</I><TT>}</TT>
+  <DD>Right-justify the string, padding with spaces to the designated length. 
+  <DT><TT>@<A name="center">center</A>{</TT><I>length</I><TT>;</TT><I>string</I><TT>}</TT>
+  <DD>Center the string within a field of the designated length. </DD></DL>Note 
+that any of these functions can also be used with an empty second argument as a 
+convenient way to generate a particular number of spaces. 
+<P>The following group of functions serve a similar purpose, except that padding 
+can be done using any arbitrary string instead of spaces. Here the first 
+argument is the string representing an empty field, and the second argument will 
+be justified within that field. 
+<DL>
+  <DT><TT>@<A name="fill-left">fill-left</A>{</TT><I>background</I><TT>;</TT><I>value</I><TT>}</TT>
+  <DD>Left-justify the value on top of the background string. For example, 
+  ``<TT>@fill-left{......;foo}</TT>'' returns ``<TT>foo...</TT>''. 
+  <DT><TT>@<A name="fill-right">fill-right</A>{</TT><I>background</I><TT>;</TT><I>value</I><TT>}</TT>
+  <DD>Right-justify the value on top of the background string. For example, 
+  ``<TT>@fill-right{00000;12}</TT>'' returns ``<TT>00012</TT>''. 
+  <DT><TT>@<A name="fill-center">fill-center</A>{</TT><I>background</I><TT>;</TT><I>value</I><TT>}</TT>
+  <DD>Center the value on top of the background string. For example, 
+  ``<TT>@fill-center{(((())));xy}</TT>'' returns ``<TT>(((xy)))</TT>''. </DD></DL>
+<P>The following functions perform formatting based in the current context in 
+the output stream: 
+<DL>
+  <DT><TT>@<A name="tab">tab</A>{</TT><I>number</I><TT>}</TT>
+  <DD>The return value consists of however many space characters it takes to 
+  advance the output stream to the specified column number. If the output stream 
+  is already at or beyond the specified column, the return value is empty. 
+  Column 1 means the first character position following a newline character or 
+  the beginning of the data stream. Thus, for example, if the last character 
+  output was a newline, then <TT>@tab{10}</TT> will return 9 space characters so 
+  that the next character written will go in column 10. 
+  <P></P>
+  <DT><TT>@<A name="wrap">wrap</A>{</TT><I>string</I><TT>}</TT>
+  <DD>Output with line wrapping. If there is room for the string on the current 
+  line of output, then it will be returned unchanged. Otherwise, when the string 
+  is longer than the remaining space on the current line, the return value 
+  consists of a newline character followed by an optional indentation string 
+  followed by the string argument with any leading whitespace removed. However, 
+  if the output stream is already at the beginning of a line, then the return 
+  value is the indentation string followed by the argument string with leading 
+  whitespace removed. By default, the lines are up to 80 characters long and the 
+  indentation string is empty. These parameters can be changed by the 
+  <TT>@set-wrap</TT> function below. Typically the argument string will be a 
+  word preceded by a space character, so that the space will separate it from 
+  the previous word if it fits on the current line, or will be discarded if a 
+  new line is started. 
+  <P>For example, you could reformat a text file with the shell command: <PRE>  gema -p '&lt;G&gt;=@wrap{ $1};\n\W\n=\n\n;\S=;' in.text out.text
+</PRE>where the first rule causes the groups of graphic (non-space) characters 
+  to be written separated by a single space in 80-character lines, the second 
+  rule preserves blank lines as paragraph separators, and the third rule 
+  discards other whitespace characters. 
+  <P></P>
+  <DT><TT>@<A name="set-wrap">set-wrap</A>{</TT><I>number</I><TT>;</TT><I>string</I><TT>}</TT>
+  <DD>For subsequent calls to <TT>@wrap</TT>, the first argument specifies the 
+  maximum number of characters in a line, and the second argument is the 
+  indentation string. No value is returned. For example, for output with a four 
+  character left margin followed by a maximum of 70 characters of text, do: 
+  ``<TT>@set-wrap{74;\s\s\s\s}</TT>'' </DD></DL>
+<p align="right"> <a href="#4.2.1Outputfrmtpddn,flln,ndwrpp" classe="ssm">up</a>&nbsp;</p>
+<H4><A name=4.2.2StrngCmpr>4.2.2</A> String Comparison&nbsp;&nbsp;
+ <a href="#4.2.1Outputfrmtpddn,flln,ndwrpp" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.2.3Cscnvr" class="ssm"><font size="-1">next</font></a></H4>
+The following 
+functions compare two strings, and then returns the value of one of three 
+arguments depending on the result of the comparison. The two arguments that are 
+not used are not evaluated, so these functions can be used for conditional 
+evaluation of side-effects as well as for returning a value. 
+<DL>
+  <DT><TT>@<A name="cmps">cmps</A>{</TT><I>string</I><TT>;</TT><I>string</I><TT>;</TT><I>less-value</I><TT>;</TT><I>equal-value</I><TT>;</TT><I>greater-value</I><TT>}</TT>
+  <DD>Compare strings, case-sensitive. The comparison is performed by the C 
+  function <TT>strcmp</TT>. The returned value is either the third, fourth, or 
+  fifth argument depending on whether the first argument is less than, equal to, 
+  or greater than the second. 
+  <DT><TT>@<A name="cmpi">cmpi</A>{</TT><I>string</I><TT>;</TT><I>string</I><TT>;</TT><I>less-value</I><TT>;</TT><I>equal-value</I><TT>;</TT><I>greater-value</I><TT>}</TT>
+  <DD>Compare strings, case-insensitive. The comparison is performed by the C 
+  function <TT>stricmp</TT>. </DD></DL>
+<p align="right"> <a href="#4.2.2StrngCmpr" classe="ssm">up</a>&nbsp;</p>
+<H4><A name=4.2.3Cscnvr>4.2.3</A> Case conversion&nbsp;&nbsp;
+ <a href="#4.2.2StrngCmpr" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.2.4Msclstrngfunct" class="ssm"><font size="-1">next</font></a></H4>
+ The following functions 
+return a copy of their argument, converting the case of any letters: 
+<DL>
+  <DT><TT>@<A name="upcase">upcase</A>{</TT><I>string</I><TT>}</TT>
+  <DD>Convert any lower case letters to upper case. 
+  <DT><TT>@<A name="downcase">downcase</A>{</TT><I>string</I><TT>}</TT>
+  <DD>Convert any upper case letters to lower case. </DD></DL>For example, the 
+following rule will capitalize each word in the input data: 
+<BR><TT>&lt;L1&gt;&lt;w&gt;=@upcase{$1}@downcase{$2}</TT> 
+<p align="right"> <a href="#4.2.3Cscnvr" classe="ssm">up</a>&nbsp;</p>
+<H4><A name=4.2.4Msclstrngfunct>4.2.4</A> Miscellaneous string functions&nbsp;&nbsp;
+ <a href="#4.2.3Cscnvr" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.3Vrb" class="ssm"><font size="-1">next</font></a></H4>
+<DL>
+  <DT><TT>@<A name="length">length</A>{</TT><I>string</I><TT>}</TT>
+  <DD>
+  <P>Returns the length of the argument as a decimal number. For 
+  example,``<TT>@length{abcdefghijkl}</TT>'' returns the string ``12''. 
+  <P>
+  <P></P>
+  <DT><TT>@<A name="reverse">reverse</A>{</TT><I>string</I><TT>}</TT>
+  <DD>Returns the characters of the argument in reversed order. <BR>For example, 
+  ``<TT>@reverse{abcd}</TT>'' returns ``<TT>dcba</TT>''. This may be useful for 
+  performing processing that needs to be done from right to left. For example, 
+  the following set of rules will insert commas in the proper position in all 
+  numbers of four or more digits, grouping the digits by threes from the 
+  right-hand end: <PRE>  &lt;D3&gt;&lt;D&gt;=@reverse{@comma{@reverse{$1$2}}}
+  comma:&lt;D3&gt;&lt;D0&gt;=$1,
+</PRE>
+  <P></P>
+  <DT><TT>@<A name="substring">substring</A>{</TT><I>skip</I><TT>;</TT><I>length</I><TT>;</TT><I>string</I><TT>}</TT>
+  <DD>Returns a substring of the third argument formed by skipping the number of 
+  characters indicated by the first argument and then taking the number of 
+  characters indicated by the second argument. For example, 
+  ``<TT>@substring{3,4,elephant}</TT>'' returns ``<TT>phan</TT>''. If the first 
+  argument is negative, the effect is the same as zero. If the first argument is 
+  greater than the length of the string, then the result value is empty. The 
+  result may actually be shorter than <I>length</I> if there are not enough 
+  characters in the string: ``<TT>@substring{3;99;tiger}</TT>'' returns 
+  ``<TT>er</TT>''. 
+  <P>Note that splitting input data into fields is usually more conveniently 
+  done by using a template such as 
+  ``<TT>\L&lt;U2&gt;&lt;U3&gt;&lt;u&gt;\n</TT>''. The <TT>@substring</TT> 
+  function is more likely to be useful in cases where the numbers are computed 
+  instead of being constants. 
+  <P></P>
+  <DT><TT>@<A name="repeat">repeat</A>{</TT><I>number</I><TT>;</TT><I>action</I><TT>}</TT>
+  <DD>The second argument is repeated the number of times specified by the first 
+  argument. For example, a string of eighty hyphens can be constructed by 
+  ``<TT>@repeat{80;-}</TT>''. 
+  <P>While this is being listed under string functions because it doesn't seem 
+  to fit any other category, it is useful for much more than just repeating 
+  strings. Rather than just repeating the value, the second argument is an 
+  action which is evaluated the specified number of times, so it can have 
+  side-effects which are also performed repeatedly. If the number is less than 
+  or equal to zero, the second argument is not evaluated at all. For example, 
+  the following action will output the numbers from 1 to 100: <PRE>    @set{n;0}@repeat{100;@incr{n} $n}
+</PRE>
+  <P></P></DD></DL>
+<P>Note that there is no operator or function needed for concatenation of 
+strings since concatenation of elements is implied simply by juxtoposition. 
+<p align="right"> <a href="#4.2.4Msclstrngfunct" classe="ssm">up</a>&nbsp;</p>
+<H3><A name=4.3Vrb>4.3</A> Variables&nbsp;&nbsp;
+ <a href="#4.2.4Msclstrngfunct" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.4Fls" class="ssm"><font size="-1">next</font></a></H3>A <EM>variable</EM> consists of a 
+<EM>name</EM> and an associated <EM>value</EM>, both of which are character 
+strings. Variable names are case-sensitive (regardless of the <TT>-i</TT> 
+option). The value can contain any of the 256 possible characters, and the name 
+can contain any characters except for NUL. Names consisting of a period followed 
+by upper case letters are by convention reserved for internal use. Both strings 
+may be of any length, limited only by the amount of memory available. Variables 
+are manipulated by using the following action functions. Except for 
+<TT>@var</TT>, they have no return value. 
+<DL>
+  <DT><TT>@<A name="set">set</A>{</TT><I>name</I><TT>;</TT><I>value</I><TT>}</TT>
+  <DD>Set the named variable to the designated value. If the variable was 
+  already defined, the previous value is discarded. For example, 
+  ``<TT>@set{count;0}</TT>'' initializes variable ``<TT>count</TT>'' to 0. 
+  <DT><TT>@<A name="var">var</A>{</TT><I>name</I><TT>}</TT>
+  <DD>Returns the current value of the named variable. If the variable is not 
+  defined, an error is reported and the return value is unspecified.[<A 
+  name="fn2_b" href="#FN2">Footnote 
+  2</A>] 
+  <DT><TT>@<A name="var">var</A>{</TT><I>name</I><TT>;</TT><I>default</I><TT>}</TT>
+  <DD>If the named variable is defined, then its current value is returned and 
+  the second argument is skipped without being evaluated. Otherwise, when the 
+  name is not defined, the return value is the result of evaluating the second 
+  argument. 
+  <P></P>
+  <DT><TT>@<A name="append">append</A>{</TT><I>name</I><TT>;</TT><I>string</I><TT>}</TT>
+  <DD>The string is appended to the end of the value of the named variable. If 
+  the variable was not previously defined, then this acts the same as 
+  <TT>@set</TT>. For example, ``<TT>@append{buf;$1}</TT>'' has the same effect 
+  as ``<TT>@set{buf;@var{buf;}$1}</TT>'', but using <TT>@append</TT> is 
+  considerably more efficient. 
+  <P></P>
+  <DT><TT>@<A name="incr">incr</A>{</TT><I>name</I><TT>}</TT>
+  <DD>The value of the named variable is incremented by one. You might think of 
+  ``<TT>@incr{n}</TT>'' as being an abbreviation for<BR>``<TT> 
+  @set{n;@add{@var{n};1}}</TT>''<BR>but it is actually more general than that. 
+  The value may contain arbitrary characters before or after the number, and the 
+  number will be incremented while leaving the other characters unchanged. For 
+  example, if the value is ``<TT>B9a</TT>'', it will be incremented to 
+  ``<TT>B10a</TT>''. The value can also be just one or more letters, in which 
+  case the last letter will be incremented to the following letter; for example, 
+  ``<TT>a</TT>'' increments to ``<TT>b</TT>''. and ``<TT>z</TT>'' increments to 
+  ``<TT>aa</TT>''. 
+  <P></P>
+  <DT><TT>@<A name="decr">decr</A>{</TT><I>name</I><TT>}</TT>
+  <DD>The value of the named variable is decremented by one. This works like 
+  <TT>@incr</TT> except that the increment is -1 instead of +1, and decrementing 
+  a value of ``<TT>a</TT>'' is an error. 
+  <P></P>
+  <DT><TT>@<A name="bind">bind</A>{</TT><I>name</I><TT>;</TT><I>string</I><TT>}</TT>
+  <DD>Sets the value of the named variable to the string. If the variable was 
+  already defined, the previous value is remembered so that it can be restored 
+  by a subsequent call to <TT>@unbind</TT>. If <TT>@bind</TT> is called in the 
+  context of a recursive argument for a template match that subsequently fails, 
+  then the binding will be undone automatically. 
+  <P></P>
+  <DT><TT>@<A name="unbind">unbind</A>{</TT><I>name</I><TT>}</TT>
+  <DD>The named variable is restored to the value it had before the most recent 
+  <TT>@bind</TT>. It it had not been defined before the <TT>@bind</TT>, then it 
+  becomes undefined again. An error is reported if the variable is undefined or 
+  if there is no pending binding. 
+  <P></P>
+  <DT><TT>@<A name="push">push</A>{</TT><I>name</I><TT>;</TT><I>string</I><TT>}</TT>
+  <DD>A variable may be thought of as a stack of values, where <TT>@var</TT> 
+  accesses the top-of-stack value, <TT>@push</TT> pushes a new value onto the 
+  top of the stack, <TT>@set</TT> modifies the top value, and <TT>@pop</TT> pops 
+  the top value off the stack. <TT>@push</TT> is actually just another name for 
+  <TT>@bind</TT>. 
+  <P></P>
+  <DT><TT>@<A name="pop">pop</A>{</TT><I>name</I><TT>}</TT>
+  <DD>The variable is restored to the value it had before the most recent 
+  <TT>@push</TT>. This is actually just another name for <TT>@unbind</TT>. The 
+  top-of-stack value is simply discarded; there is no return value. </DD></DL>
+<P>Also, <TT>@var</TT> (both the one and two argument forms) may be abbreviated 
+as <TT>$</TT>, providing that the name does not begin with a digit. Thus, for 
+example, ``<TT>${foo}</TT>'' has the same meaning as ``<TT>@var{foo}</TT>''. 
+Furthermore, if the variable name is a single constant letter and there is no 
+default value argument, then the braces may be omitted. Thus, 
+``<TT>@var{i}</TT>'' can be abbreviated as ``<TT>$i</TT>''. This last form 
+(dollar letter) also has the special property that it can be used in a template 
+to insert the current value of a variable into the template to be matched. All 
+of the other variable operations can only be used in actions. 
+<P>Lisp programmers may find it helpful to note that <TT>@set</TT> is like the 
+Lisp <TT>set</TT> form, <TT>@var</TT> is like <TT>symbol-value</TT>, and the 
+combination of <TT>@bind</TT> and <TT>@unbind</TT> is like what happens in a 
+<TT>let</TT> for a variable with dynamic scope. 
+<P>While there is no support for arrays as such, note that since the name of a 
+variable can contain any characters, and the name is an evaluated argument, it 
+is possible to do things like ``<TT>@set{A[$i];$1}</TT>'' which looks like an 
+array and can be used like an array, even though the brackets and subscript are 
+really just part of the variable name. 
+<P>Variables can also be used as an associative look-up table, where the name is 
+the key. However, the current implementation assumes that the number of 
+variables will be small, so it may become slow if used as a table with a large 
+number of entries. 
+<p align="right"> <a href="#4.3Vrb" classe="ssm">up</a>&nbsp;</p>
+
+<H3><A name=4.4Fls>4.4</A> Files&nbsp;&nbsp;
+ <a href="#4.3Vrb" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.4.1Pthnmnpu" class="ssm"><font size="-1">next</font></a></H3>
+<p align="right"> <a href="#4.4Fls" classe="ssm">up</a>&nbsp;</p>
+
+      <H4><A name=4.4.1Pthnmnpu>4.4.1</A> Pathname manipulation&nbsp;&nbsp; 
+        <a href="#4.4Fls" class="ssm"><font size="-1">prev</font></a> <a href="#toc" class="ssm"><font size="-1">toc</font></a> 
+        <a href="#4.4.2Usngltrnnputndutputfls" class="ssm"><font size="-1">next</font></a></A></H4>
+      This group of functions allow constructing pathnames in a manner that allows 
+      a pattern file to be independent of the pathname syntax for a particular 
+      operating system. 
+      <P>
+<DL>
+  <DT><TT>@<A name="makepath">makepath</A>{</TT><I>directory</I><TT>;</TT><I>name</I><TT>;</TT><I>suffix</I><TT>}</TT>
+  <DD>Returns the file pathname formed by merging the file name in the second 
+  argument with the default directory in the first argument and replacing the 
+  suffix from the third argument, if not empty. If the second argument is an 
+  absolute pathname, then it retains the same directory and the first argument 
+  is not used. For example (assuming running on Unix): 
+  <P><TT>@makepath{/home/dir;bar.c;.o}</TT> =&gt; 
+  <TT>/home/dir/bar.o</TT><BR><TT>@makepath{/home/dir;/scr/bar.c;.o}</TT> =&gt; 
+  <TT>/scr/bar.o</TT><BR><TT>@makepath{/home/dir;bar.c;}</TT> =&gt; 
+  <TT>/home/dir/bar.c</TT> 
+  <P>
+  <P></P>
+  <DT><TT>@<A name="mergepath">mergepath</A>{</TT><I>pathname</I><TT>;</TT><I>name</I><TT>;</TT><I>suffix</I><TT>}</TT>
+  <DD>Returns the file pathname formed by merging the second argument with a 
+  default directory extracted from the first argument and replacing the suffix 
+  from the third argument, if not empty. This differs from <TT>@makepath</TT> in 
+  that the first argument is a complete file pathname whose name portion is 
+  ignored. This would be used to create a new file in the same directory as 
+  another file. For example (assuming running on Unix): 
+  <P><TT>@mergepath{/a/foo.i;bar.c;/a/baz.o}</TT> =&gt; 
+  <TT>/a/bar.o</TT><BR><TT>@mergepath{/a/foo.i;/b/bar.c;.o}</TT> =&gt; 
+  <TT>/b/bar.o</TT><BR><TT>@mergepath{/a/foo.i;bar.c;}</TT> =&gt; 
+  <TT>/a/bar.c</TT> 
+  <P>
+  <P></P>
+  <DT><TT>@<A name="relative-path">relative-path</A>{</TT><I>pathname</I><TT>;</TT><I>pathname</I><TT>}</TT>
+  <DD>If the two pathnames have the same directory portion, return the second 
+  argument with the common directory removed; else return the whole second 
+  argument. Note that if the two arguments are the same, this has the effect of 
+  separating the file name from the directory. For example: 
+  <P><TT>@relative-path{/a/x/cat.x;/a/x/dog.c}</TT> =&gt; 
+  <TT>dog.c</TT><BR><TT>@relative-path{/a/x/cat.x;/a/y/dog.c}</TT> =&gt; 
+  <TT>/a/y/dog.c</TT> 
+  <P>
+  <P></P>
+  <DT><TT>@<A name="expand-wild">expand-wild</A>{</TT><I>pathname</I><TT>}</TT>
+  <DD>Usually this function just returns its argument followed by a newline. 
+  When running on MS-DOS and the <I>pathname</I> is a wild card (i.e. contains 
+  ``<TT>*</TT>'' or ``<TT>?</TT>''), the return value consists of all files that 
+  match the pattern, with a newline following each one. If there are no matches, 
+  a warning is written to the error output and the return value is empty. This 
+  wild card expansion is done by an MS-DOS system call, so it is consistent with 
+  other MS-DOS utilities, but the meaning of ``<TT>*</TT>'' is not completely 
+  the same as in <B>gema</B> patterns. On Unix, wild card arguments are presumed 
+  to have already been expanded by the shell, so expansion is not done here. 
+  <P></P></DD></DL>
+<p align="right"> <a href="#4.4.1Pthnmnpu" classe="ssm">up</a>&nbsp;</p>
+
+<H4><A name=4.4.2Usngltrnnputndutputfls>4.4.2</A> Using alternate input and 
+output files&nbsp;&nbsp;
+ <a href="#4.4.1Pthnmnpu" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.4.3Flcntxqur" class="ssm"><font size="-1">next</font></a></H4>
+<DL>
+  <P>
+  <DT><TT>@<A name="err">err</A>{</TT><I>string</I><TT>}</TT>
+  <DD>The argument is evaluated with its output being directed to the standard 
+  error output stream (<TT>stderr</TT> in C terminology). There is no return 
+  value. This can be used to write error messages or status messages. Don't 
+  forget that newlines must be explicitly provided, so the argument typically 
+  needs to end with ``<TT>\n</TT>''. 
+  <P></P>
+  <DT><TT>@<A name="out">out</A>{</TT><I>string</I><TT>}</TT>
+  <DD>The argument is evaluated with its output being sent directly to the 
+  current output file instead of to the current output stream. The distinction 
+  arises during translation of a recursive argument, where <TT>@out</TT> can be 
+  used to write directly to the output file instead of appending to the value of 
+  the argument being translated. Usually this is not what you want to do, but it 
+  may be useful in some circumstances. 
+  <P>For example, suppose some algebraic language is to be translated into an 
+  assembly-like language. A typical rule might look something like: <PRE>  expr:&lt;term&gt;+&lt;term&gt;=@incr{t}@out{\N  ADD $1,$2,R$t\n}R$t
+</PRE>where an expression ``<TT>x+y</TT>'' would be processed by outputting 
+  ``<TT> ADD x,y,R1</TT>'' and returning ``<TT>R1</TT>'' as the result value to 
+  be used as an operand of the next instruction. 
+  <P></P>
+  <DT><TT>@<A name="write">write</A>{</TT><I>pathname</I><TT>;</TT><I>string</I><TT>}</TT>
+  <DD>First the first argument is evaluated and the file that it names is opened 
+  for writing. If the pathname is ``<TT>-</TT>'', then standard output will be 
+  used. If the same identical pathname has previously been used in a 
+  <TT>@write</TT> call, then it will continue writing to the end of the same 
+  file without re-opening or rewinding it. 
+  <P>Then the second argument is evaluated, with its output being directed to 
+  the designated file. Within that evaluation, the function <TT>@outpath</TT> 
+  will return the first argument of the <TT>@write</TT>. 
+  <P>The file remains open until either the program terminates or the same 
+  pathname is referenced in a call to <TT>@close</TT> or <TT>@read</TT>. 
+  <P></P>
+  <DT><TT>@<A name="close">close</A>{</TT><I>pathname</I><TT>}</TT>
+  <DD>If the argument is identical to one previously appearing as the pathname 
+  argument in a call to <TT>@write</TT>, then that output file will be closed. 
+  Otherwise, nothing happens. 
+  <P></P>
+  <DT><TT>@<A name="read">read</A>{</TT><I>pathname</I><TT>}</TT>
+  <DD>The file named by the argument is opened for reading. If the 
+  <I>pathname</I> is ``<TT>-</TT>'', then standard input is used. If the same 
+  identical pathname was previously used in a <TT>@write</TT>, the output file 
+  will be closed before re-opening the file for reading. The result is an input 
+  stream that will read from the file as needed, and close it when the end is 
+  reached. This is commonly used in the context: 
+  ``<TT>@<I>domain</I>{@read{<I>pathname</I>}}</TT>'' which says to translate 
+  using the alternate file as input. Within this translation, the functions 
+  <TT>@file</TT>, <TT>@inpath</TT>, <TT>@line</TT>, <TT>@column</TT>, and 
+  <TT>@file-time</TT> will all refer to the file named in the argument of 
+  <TT>@read</TT>. However, if the <TT>@read</TT> function has its result 
+  concatenated with something else instead of appearing by itself as the 
+  argument to another function, then the effect will be to copy the entire 
+  contents of the file to the current output and close the file. 
+  <P></P>
+  <DT><TT>@<A name="probe">probe</A>{</TT><I>pathname</I><TT>}</TT>
+  <DD>This can be used to test a pathname to see whether it can be opened. The 
+  result value is ``<TT>F</TT>'' if the argument names an existing file, 
+  ``<TT>D</TT>'' if it names a directory, ``<TT>V</TT>'' if it names a device, 
+  ``<TT>U</TT>'' if it is undefined, or ``<TT>X</TT>'' if it is defined in some 
+  unexpected way. </DD></DL>
+<p align="right"> <a href="#4.4.2Usngltrnnputndutputfls" classe="ssm">up</a>&nbsp;</p>
+<H4><A name=4.4.3Flcntxqur>4.4.3</A> File context queries&nbsp;&nbsp;
+ <a href="#4.4.2Usngltrnnputndutputfls" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.5Cntrflwfunct" class="ssm"><font size="-1">next</font></a></H4>
+<DL>
+  <P>
+  <DT><TT>@<A name="outpath">outpath</A>{}</TT>
+  <DD>Returns the pathname of the current output file, or as much of the 
+  pathname as is known. This would be the same as the output file argument on 
+  the command line or the pathname argument to the <TT>@write</TT> function if 
+  within that context. 
+  <P></P>
+  <DT><TT>@<A name="inpath">inpath</A>{}</TT>
+  <DD>Returns the pathname of the current input file, or as much of the pathname 
+  as is known. This would be the same as the input file argument on the command 
+  line or the pathname argument to the <TT>@read</TT> function. 
+  <P></P>
+  <DT><TT>@<A name="file">file</A>{}</TT>
+  <DD>Returns the name of the current input file, with any directories removed. 
+  <P></P>
+  <DT><TT>@<A name="line">line</A>{}</TT>
+  <DD>Returns the current line number in the input file. More precisely, this is 
+  the line number of the last character matched by the template. If that 
+  character is a newline character, this is the number of the line preceding the 
+  newline. 
+  <P></P>
+  <DT><TT>@<A name="column">column</A>{}</TT>
+  <DD>Returns the column number of the current position in the input stream, 
+  i.e., the column of the last character in the text matched by the template. 
+  For example, the following default rule could be used to write an error 
+  message for unexpected input: <PRE>  ?=@err{\NIllegal character "$1" in line @line, column @column.\n}
+</PRE>
+  <P></P>
+  <DT><TT>@<A name="out-column">out-column</A>{}</TT>
+  <DD>Returns the column number of the current position in the current output 
+  file. 
+  <P></P>
+  <DT><TT>@<A name="file-time">file-time</A>{}</TT>
+  <DD>Returns the date and time when the current input file was last modified. 
+  The information is presented as formatted by the C function <TT>ctime</TT>, 
+  except without any newline. </DD></DL>
+<p align="right"> <a href="#4.4.3Flcntxqur" classe="ssm">up</a>&nbsp;</p>
+<H3><A name=4.5Cntrflwfunct>4.5</A> Control flow functions&nbsp;&nbsp;
+ <a href="#4.4.3Flcntxqur" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.6Othrprtsystmntrf" class="ssm"><font size="-1">next</font></a></H3>
+<DL>
+  <DT><TT>@<A name="end">end</A>{}</TT>
+  <DD>Signals the successful completion of the current translation. 
+  <P>If this appears in the action for a pattern match at the top level of a 
+  file, the remainder of the input file will not be read, and if there are no 
+  more input files to be processed, the program will terminate with an exit 
+  status of 0 (assuming there were no errors before). For example, the following 
+  shell command will print the first line that matches and then stop: <PRE>  gema -match -p 'Title\:*\n=$0@end' foo
+</PRE>
+  <P>If this appears within the context of a recursive argument, then it ends 
+  the argument and returns control to the enclosing template to continue 
+  processing the input. For example, with the following rules: <PRE>    sign:+=+@end;-=-@end;=@end
+</PRE>the template argument ``<TT>&lt;sign&gt;</TT>'' will accept an optional 
+  plus or minus sign and nothing more. 
+  <P></P>
+  <DT><TT>@<A name="fail">fail</A>{}</TT>
+  <DD>Signals failure of the current translation. At top-level, this will 
+  terminate processing of the input file like <TT>@end</TT>, except that the 
+  program will have a non-zero exit status. For example, the following command 
+  will indicate by the exit status whether the file being tested contains a 
+  particular string: <PRE>  gema -match -p 'Success=@end;\E=@fail' foo.text
+</PRE>If the string is found, the program exits with 0; if the end of the file 
+  is reached, then a non-zero exit status is returned. 
+  <P>Within the context of a recursive argument, this causes the enclosing 
+  template to report a failed match. 
+  <P></P>
+  <DT><TT>@<A name="terminate">terminate</A>{}</TT>
+  <DD>This ends the translation of a recursive argument. If the argument value 
+  is empty, then the template match fails, like for <TT>@fail</TT>. Otherwise, 
+  when some characters have been accepted, processing of the template continues 
+  like for <TT>@end</TT>. This is typically used instead of <TT>@end</TT> in a 
+  delimiter rule when an empty string is not be be considered a match. For 
+  example, with the following rules: <PRE>    vowel:a=a;e=e;i=i;o=o;u=u;=@terminate
+</PRE>the argument ``<TT>&lt;vowel&gt;</TT>'' will match one or more vowels. 
+  <P></P>
+  <DT><TT>@<A name="abort">abort</A>{}</TT>
+  <DD>Immediately terminates execution of the program with a non-zero exit 
+  status. 
+  <P></P>
+  <DT><TT>@<A name="exit-status">exit-status</A>{</TT><I>number</I><TT>}</TT>
+  <DD>This function can be used to specify that a particular exit status value 
+  will be returned when the program exits, providing that there is no error 
+  condition that specified a higher value first. This could be called before 
+  <TT>@fail</TT> or <TT>@abort</TT> to cause some particular non-zero value to 
+  be returned for the sake of a shell script that wants to test for what kind of 
+  failure occurred. </DD></DL>
+<p align="right"> <a href="#4.5Cntrflwfunct" classe="ssm">up</a>&nbsp;</p>
+<H3><A name=4.6Othrprtsystmntrf>4.6</A> Other operating system interfaces&nbsp;&nbsp;
+ <a href="#4.5Cntrflwfunct" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.7Dfn" class="ssm"><font size="-1">next</font></a></H3>
+<P>
+<DL>
+  <DT><TT>@<A name="date">date</A>{}</TT>
+  <DD>Returns the current date, in the form: 
+  <TT><I>mm</I>/<I>dd</I>/<I>yyyy</I></TT> 
+  <DT><TT>@<A name="datime">datime</A>{}</TT>
+  <DD>Returns the current date and time, as formatted by the C function 
+  <TT>ctime</TT>, except without any newline. 
+  <DT><TT>@<A name="time">time</A>{}</TT>
+  <DD>Returns the current time, in the form: 
+  <TT><I>hh</I>:<I>mm</I>:<I>ss</I></TT> 
+  <P></P>
+  <DT><TT>@<A name="getenv">getenv</A>{</TT><I>name</I><TT>;</TT><I>default</I><TT>}</TT>
+  <DD>Returns the value of an environment variable, as from the C function 
+  <TT>getenv</TT>. The first argument is the name of the environment variable. 
+  The second argument is optional, and will be returned as the default value if 
+  the environment variable is not defined. For example, on a Unix system, the 
+  action ``<TT>@getenv{USER}</TT>'' will output the current user ID. 
+  <P></P>
+  <DT><TT>@<A name="shell">shell</A>{</TT><I>string</I><TT>}</TT>
+  <DD>The argument value is executed as a shell command by passing it to the C 
+  function <TT>system</TT>. Although it would be desirable for this to return 
+  the text written by execution of the command, that is not currently 
+  implemented. Instead, any output from the command goes directly to standard 
+  output, and there is no value returned to the current output stream. For 
+  example, the following action could be used to sort a temporary file:
+  <PRE>    @shell{sort \&lt; '${tmpfil1}' \&gt; '${tmpfil2}'}
+</PRE></DD></DL>
+<p align="right"> <a href="#4.6Othrprtsystmntrf" classe="ssm">up</a>&nbsp;</p>
+<H3><A name=4.7Dfn>4.7</A> Definitions&nbsp;&nbsp;
+ <a href="#4.6Othrprtsystmntrf" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.8SttnOptn" class="ssm"><font size="-1">next</font></a></H3>The following functions can be used 
+to add or remove definitions of rules at run time. 
+<P>
+<DL>
+  <DT><TT>@<A name="define">define</A>{</TT><I>patterns</I><TT>}</TT>
+  <DD>Define new rules. The evaluated argument value is read as a pattern file, 
+  defining rules and performing immediate actions as specified. There is no 
+  return value. For example, you can have one pattern file include another by 
+  using an immediate action like this: <PRE>    @define{@read{foo.pat}}
+</PRE>For another example, to emulate a C pre-processor, the <TT>#define</TT> 
+  directive could be implemented by the following rule (assuming, for simplicity 
+  of the example, no arguments, no continuation lines, and no comments):
+ <PRE>    \N\#define &lt;I&gt; *\n=@define{\\I$1\\I\=@quote{$2}}
+</PRE>Note that the tricky part here is to get the right level of quoting so 
+  that things are evaluated at the proper time. The <TT>@quote</TT> function is 
+  explained below. Given the input line ``<TT>#define NUM 34</TT>'', the 
+  argument of <TT>@define</TT> will evaluate to the string 
+  ``<TT>\INUM\I=34</TT>'' which will then be defined as a new rule. 
+  <P></P>
+  <DT><TT>@<A name="quote">quote</A>{</TT><I>string</I><TT>}</TT>
+  <DD>Returns a copy of the argument value with backslashes inserted where 
+  necessary so that <TT>@define</TT> and <TT>@undefine</TT> will treat all of 
+  the characters as literals.[<A name="fn3_b"
+  href="#FN3">Footnote 
+  3</A>] For example, given an argument which evaluates to the string ``<TT>a * 
+  3</TT>'', the return value will be ``<TT>a\ \*\ 3</TT>''. 
+  <P></P>
+  <DT><TT>@<A name="undefine">undefine</A>{</TT><I>patterns</I><TT>}</TT>
+  <DD>This can be used to undefine rules. The argument is processed like for 
+  <TT>@define</TT>, except that instead of defining rules, the effect is to 
+  cancel any existing rule that exactly matches. The argument may also be just a 
+  template, without any ``<TT>=</TT>'' or action, in which case any rule with 
+  the same template will be cancelled, without regard to its action. For 
+  example, the C <TT>#undef</TT> directive could be emulated (with the same 
+  simplifying assumptions as the <TT>#define</TT> example above) by the rule: <PRE>    \N\#undef &lt;I&gt;=@undefine{\\I$1\\I}
+</PRE>
+  <P></P>
+  <DT><TT>@<A name="subst">subst</A>{</TT><I>patterns</I><TT>;</TT><I>operand</I><TT>}</TT>
+  <DD>Substitution. Return the result of translating the operand according to 
+  the patterns specified by the first argument. The first argument is processed 
+  the same as by <TT>@define</TT>, except that the rules are implicitely defined 
+  in a temporary domain which is deleted after being used to translate the 
+  operand. An explicit domain name (i.e. before a colon) is not allowed. For 
+  example, ``<TT>@subst{\\Iis\\I\=was;this is it}</TT>'' will return ``<TT>this 
+  was it</TT>''. Usually this sort of substition is more conveniently and 
+  efficiently done by using a domain function (for example, ``<TT>@frob{this is 
+  it}</TT>'' with rule ``<TT>frob:\Iis\I=was</TT>''), but the <TT>@subst</TT> 
+  function can be used in cases where the substitution needs to be computed at 
+  run time. For example, to emulate a C <TT>#define</TT> directive with one 
+  argument: <PRE>    \N\#define &lt;I&gt;\W(\W&lt;I&gt;\W) *\n=\
+      @define{\\I$1\\W(\#)\=@subst{\\I$2\\I\=\\\$1;@quote{*}}}
+</PRE>Here <TT>@subst</TT> is used to replace references to the C argument 
+  name with the ``<TT>$1</TT>'' notation used by <B>gema</B>. </DD></DL>
+<p align="right"> <a href="#4.7Dfn" classe="ssm">up</a>&nbsp;</p>
+<H3><A name=4.8SttnOptn>4.8</A> Setting Options&nbsp;&nbsp;
+ <a href="#4.7Dfn" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="#4.9Infrmfunct" class="ssm"><font size="-1">next</font></a></H3>The following group of 
+functions can be used to set various program options. These are typically used 
+as immediate actions in a pattern file to set the options that the file needs, 
+instead of requiring separate command line options. None of these functions 
+return any result value. 
+<P>
+<DL>
+  <DT><TT>@<A name="set-switch">set-switch</A>{</TT><I>name</I><TT>;</TT><I>value</I><TT>}</TT>
+  <DD>Sets the value of any of several option switches that have numeric values. 
+  In most cases the value should be either 1 for true or 0 for false. The 
+  defined switch names are: 
+  <DL>
+    <DT><TT>arglen</TT>
+    <DD>- maximum length for ``<TT>*</TT>'' operands. This is the only switch 
+    that takes a number rather than being just true or false. 
+    <DT><TT>b</TT>
+    <DD>- binary mode 
+    <DT><TT>i</TT>
+    <DD>- case-insensitive mode 
+    <DT><TT>k</TT>
+    <DD>- keep going after errors 
+    <DT><TT>line</TT>
+    <DD>- line mode 
+    <DT><TT>match</TT>
+    <DD>- match only mode 
+    <DT><TT>t</TT>
+    <DD>- token mode (However, this is only part of the ``<TT>-t</TT>'' command 
+    line option, which is implemented by 
+    ``<TT>@set-switch{t;1}@set-switch{w;1}</TT>''.) 
+    <DT><TT>trace</TT>
+    <DD>- write pattern match diagnostic messages to <TT>stderr</TT>. (Only 
+    recognized if the program was compiled with ``<TT>-DTRACE</TT>''.) 
+    <DT><TT>w</TT>
+    <DD>- ignore whitespace in the input (This is only part of the 
+    ``<TT>-w</TT>'' command line option, which is implemented by 
+    ``<TT>@set-switch{w;1}@set-syntax{S;\s\t}</TT>''.) </DD></DL>In each case, the 
+  switch corresponds to the command line option with the same name, and further 
+  explanation of the meaning can be found there. 
+  <P></P>
+  <DT><TT>@<A name="get-switch">get-switch</A>{</TT><I>name</I><TT>}</TT>
+  <DD>Returns the current value of the named switch. 
+  <P></P>
+  <DT><TT>@<A name="set-parm">set-parm</A>{</TT><I>name</I><TT>;</TT><I>value</I><TT>}</TT>
+  <DD>Sets the value of any of several options that have string values. The 
+  defined names are ``<TT>idchars</TT>'', ``<TT>filechars</TT>'', and 
+  ``<TT>backup</TT>''. These are used to implement the command line options with 
+  the same names, and the meaning is documented there. 
+  <P></P>
+  <DT><TT>@<A name="set-syntax">set-syntax</A>{</TT><I>type</I><TT>;</TT><I>charset</I><TT>}</TT>
+  <DD>This function can be used to change the meaning of characters in patterns. 
+  When used as an immediate action in a pattern file, it takes effect beginning 
+  with the next line read. The first argument designates one or more syntactic 
+  categories, and the second argument is a set of characters that will now have 
+  that meaning. For each character in the first argument, the corresponding 
+  character in the second argument acquires the designated syntactic class; when 
+  there is only one remaining character in the first argument, it applies to all 
+  of the remaining characters in the second argument. The syntactic class may be 
+  identified by either the special character which currently has that class (or 
+  which has that class by default if it is currently a literal), or by one of 
+  the following letters: 
+  <DL>
+    <DT><TT>A</TT>
+    <DD>- argument separator. This is one of the two uses of the semicolon in 
+    the default syntax. For example, if you wanted to be able to use comma to 
+    separate arguments, do: ``<TT>@set-syntax{A;,}</TT>'' 
+    <DT><TT>C</TT>
+    <DD>- comment. Causes the rest of the line to be ignored as a comment. 
+    <DT><TT>D</TT>
+    <DD>- domain argument. Characters of this class can be used as an 
+    abbreviation for a domain argument with the same name. There are no 
+    characters that have this class by default. For example, if you say 
+    ``<TT>@set-syntax{D;%}</TT>'', then the character ``<TT>%</TT>'' represents 
+    a recursive argument in the domain defined by rules prefixed by 
+    ``<TT>%:</TT>''. In other words, ``<TT>%</TT>'' becomes an abbreviation for 
+    ``<TT>&lt;%&gt;</TT>'', and it also can be used in an action to represent 
+    the value of the corresponding argument, like with ``<TT>*</TT>'', 
+    ``<TT>?</TT>'', and ``<TT>#</TT>''. 
+    <DT><TT>E</TT>
+    <DD>- escape. Together with the following character, it specifies a control 
+    character or template operator. This is half of what the backslash does in 
+    the default syntax. 
+    <DT><TT>F</TT>
+    <DD>- function prefix. This introduces the name of a function to be called. 
+    This is one of two uses of ``<TT>@</TT>'' in the default syntax. 
+    <DT><TT>I</TT>
+    <DD>- ignore. Characters with this class will be completely ignored. There 
+    are no characters that have this class by default. 
+    <DT><TT>K</TT>
+    <DD>- character operator. Causes the following character to have its default 
+    meaning. This is one of the two things that ``<TT>@</TT>'' is used for in 
+    the default syntax. 
+    <DT><TT>L</TT>
+    <DD>- literal. For example, the command line option ``<TT>-literal 
+    '/?^'</TT>'' is implemented by: ``<TT>@set-syntax{L;\/\?\^}</TT>'' 
+    <DT><TT>M</TT>
+    <DD>- quote until match. Causes the following characters to be taken 
+    literally until a second occurrence of the character is found. For the sake 
+    of compatibility with earlier versions, there are currently no characters 
+    that have this class by default. For example, ``<TT>@set-syntax{M;\'}</TT>'' 
+    causes all characters between matching apostrophes to be taken literally 
+    (even backslash). 
+    <DT><TT>Q</TT>
+    <DD>- quote one character. Causes the following character to be taken 
+    literally. This is half of what the backslash does in the default syntax. 
+    <DT><TT>S</TT>
+    <DD>- ignored space. Characters with this class will be ignored unless they 
+    separate two identifiers, in which case they will be treated like 
+    ``<TT>\S</TT>''. There are no characters that have this class by default, 
+    but part of what the <TT>-w</TT> option does is: 
+    ``<TT>@set-syntax{S;\s\t}</TT>'' 
+    <DT><TT>T</TT>
+    <DD>- terminator. A character with this class marks the end of a rule. By 
+    default, newline is used for this purpose. </DD></DL>For example, 
+  ``<TT>@set-syntax{\*;\~}</TT>'' would cause tilde to represent a wildcard 
+  argument. This doesn't change the meaning of the asterisk, it just means that 
+  now either of the characters can be used for that purpose. If you wanted to 
+  delimit recursive arguments with square brackets, and let angle brackets be 
+  literals, do: ``<TT>@set-syntax{\&lt;\&gt;LL;\[\]\&lt;\&gt;}</TT>'' 
+  <P></P>
+  <DT><TT>@<A name="reset-syntax">reset-syntax</A>{}</TT>
+  <DD>Re-initializes the syntax tables to their default state, thus undoing the 
+  effects of any calls to <TT>@set-syntax</TT>, including any use of the 
+  <TT>-literal</TT> option. 
+  <P></P>
+  <DT><TT>@<A name="set-locale">set-locale</A>{</TT><I>name</I><TT>}</TT>
+  <DD>Set the internationalization locale, using the C function 
+  <TT>setlocale</TT>. A typical usage would be: <PRE>    @set-locale{@getenv{LANG;C}}
+</PRE>This may affect which characters are considered to be letters. Currently 
+  this has no effect on MS-DOS. </DD></DL>
+<p align="right"> <a href="#4.8SttnOptn" classe="ssm">up</a>&nbsp;</p>
+<H3><A name="4.9Infrmfunct">4.9</A> Informational functions&nbsp;&nbsp;
+ <a href="#4.8SttnOptn" class="ssm"><font size="-1">prev</font></a>
+ <a href="#toc" class="ssm"><font size="-1">toc</font></a>
+ <a href="conclude.html#5Custmcmmnprcs" class="ssm"><font size="-1">next</font></a></H3>
+<DL>
+  <DT><TT>@<A name="show-help">show-help</A>{}</TT>
+  <DD>Displays on the standard error output a brief explanation of how to use 
+  the program. No value is returned. This is used internally to implement the 
+  <TT>-help</TT> option, and is not likely to be of use otherwise. The message 
+  is constructed based on the current syntax tables, so use of the 
+  <TT>@set-syntax</TT> function will be reflected here. 
+  <P></P>
+  <DT><TT>@<A name="version">version</A>{}</TT>
+  <DD>Returns the program version identification string. This is used internally 
+  to implement the <TT>-version</TT> option, and is not likely to be of use 
+  otherwise. </DD></DL>
+      <p align="right"> <a href="#4.9Infrmfunct" classe="ssm">up</a>&nbsp;</p>
+
+      <hr>&nbsp;
+<a name="toc"></a>
+<H2>Table of Contents</H2>
+<A href="gema_ref.html#1Intrd">1 Introduction</A><BR>
+<A href="gema_ref.html#2OprtOvrv">2 Operational Overview</A><BR>
+<A href="notation.html#3Ntt">3 Notation<BR></A>
+&nbsp;&nbsp;<A href="notation.html#3.1Spcchrc">3.1 Special characters<BR></A>
+&nbsp;&nbsp;<A href="notation.html#3.2EscpSqun">3.2 Escape Sequences<BR></A>
+&nbsp;&nbsp;<A href="notation.html#3.3Rcgnrgumn">3.3 Recognizer arguments<BR></A>
+<A href="function.html#4BultFunct">4 Built-in Functions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.1Numbr">4.1 Numbers<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.2Strngfunct">4.2 String functions<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.1Outputfrmtpddn,flln,ndwrpp">4.2.1 Output formatting -- padding, filling, and wrapping<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.2StrngCmpr">4.2.2 String Comparison<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.3Cscnvr">4.2.3 Case conversion<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.2.4Msclstrngfunct">4.2.4 Miscellaneous string functions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.3Vrb">4.3 Variables<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.4Fls">4.4 Files<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.4.1Pthnmnpu">4.4.1 Pathname manipulation<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.4.2Usngltrnnputndutputfls">4.4.2 Using alternate input and output files<BR></A>
+&nbsp;&nbsp;&nbsp;&nbsp;<A href="function.html#4.4.3Flcntxqur">4.4.3 File context queries<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.5Cntrflwfunct">4.5 Control flow functions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.6Othrprtsystmntrf">4.6 Other operating system interfaces<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.7Dfn">4.7 Definitions<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.8SttnOptn">4.8 Setting Options<BR></A>
+&nbsp;&nbsp;<A href="function.html#4.9Infrmfunct">4.9 Informational functions<BR>
+</A> <A href="function.html#4.10Lrltdfnctns"> </A> <A href="conclude.html#5Custmcmmnprcs">5 
+Customized command-line processing<BR>
+</A>
+<A href="conclude.html#6Extcds">6 Exit codes<BR></A>
+<A href="conclude.html#7SttusndFuturdvl">7 Status and Future development<BR></A>
+<A href="conclude.html#8Acknw">8 Acknowledgments</A> 
+<br>&nbsp;
+<hr>&nbsp;
+<br>&nbsp;
+<H2>Footnotes</H2>
+<P><A name=FN1><strong>Footnote 1</strong></A>:<BR>Empty braces might mean either no argument, or 
+a single argument which is an empty string. This potential ambiguity is not a 
+problem because there aren't any functions that take a single optional argument.(<a href="#fn1_b">back</a>)</P> 
+
+<P><A name=FN2><strong>Footnote 2</strong></A>:<BR>Currently, the name is returned, but that 
+should not be relied on. (<a href="#fn2_b">back</a>)</P> 
+
+<P><A name=FN3><strong>Footnote 3</strong></A>:<BR>Lisp programmers should not confuse 
+<TT>@quote</TT> with the Lisp <TT>quote</TT> form; rather this is like the 
+notion of <EM>printing with slashification</EM>. (<a href="#fn3_b">back</a>)</P> 
+</td>
+    <td width="2">&nbsp;</td>
+    <td width="150" align="center" valign="top" class="tl"><img src="side.png" width="137" height="447" border="0" usemap="#Map"></td>
+  </tr>
+  <!--
+  <tr><td  align="right" colspan="3" class="ssm"><font color="#CCCCCC" size="-1">Webdesign by Remo Dentato</font></td></tr>
+  -->
+</table>
+<map name="Map">
+  <area shape="rect" coords="7,32,132,69" href="http://sourceforge.net/projects/gema/" target="_blank">
+  <area shape="rect" coords="36,141,107,200" href="http://opensource.org/docs/definition.php">
+  <area shape="rect" coords="38,278,107,344" href="http://www.lua.org" target="_blank">
+  <area shape="rect" coords="48,407,95,442" href="links.html">
+</map>
+</body>
+</html>
+
