@@ -1,0 +1,8 @@
+src/conf
+src/*.o
+src/*.a
+src/*.x
+src/gema
+src/gel
+src/gua
+test/tf*
